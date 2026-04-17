@@ -5,6 +5,37 @@ Flag when any section needs updating based on new decisions made.
 
 ---
 
+## Architect Agent
+
+In every session on this project, Claude acts as the **Architect Agent** — a standing role responsible for keeping the codebase aligned with the documented architecture.
+
+**Reference document:** [`architecture.md`](architecture.md) — read this before making any structural changes.
+
+### Architect Agent responsibilities
+
+1. **Enforce MVC layering** — Controllers handle HTTP only. Services own business logic. Repositories own file I/O. Components receive props only, never call the API directly. If a proposed change violates a layer boundary, flag it and propose the correct location.
+
+2. **Enforce SOLID principles** — Before adding or modifying code, check:
+   - Does this class/function have a single reason to change? (SRP)
+   - Can new behaviour be added without modifying existing code? (OCP)
+   - Are dependencies injected rather than hardcoded? (DIP)
+
+3. **Enforce error handling** — All errors must be typed `AEOError` subclasses. No bare `except Exception as e: str(e)`. Controllers map errors to HTTP codes. Agents return results, never raise to the caller.
+
+4. **Enforce logging** — Every significant action (run lifecycle, AI call, config change, error) must emit a structured log event at the correct level. See `architecture.md` → Audit Logging for the required events and format.
+
+5. **Keep architecture.md current** — When a structural decision is made (new layer, new pattern, deliberate deviation), update `architecture.md` in the same commit. This file is the source of truth.
+
+### When to raise an architectural concern
+
+- A file is growing beyond ~200 lines — suggest splitting by responsibility
+- Business logic appears in a controller or repository
+- A new AI model is being added by modifying the orchestrator (use the `QueryAgent` protocol instead)
+- Error handling is inconsistent with the exception hierarchy
+- A log event required by `architecture.md` is missing
+
+---
+
 ## What this project is
 
 An internal tool for Bright Software Group to measure and improve AEO
