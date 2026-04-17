@@ -22,6 +22,7 @@ load_dotenv()
 import anthropic
 from models import ContentJob, ContentResult
 from core.logging import get_logger
+from errors.exceptions import ChannelNotSupported, MissingAPIKey
 
 logger = get_logger(__name__)
 
@@ -192,14 +193,14 @@ async def generate_content(job: ContentJob) -> ContentResult:
     channel = job.channel.lower()
 
     if channel not in _CHANNEL_PROMPTS:
-        raise ValueError(
-            f"Unknown channel '{channel}'. "
-            f"Valid channels: {sorted(_CHANNEL_PROMPTS.keys())}"
+        raise ChannelNotSupported(
+            f"Channel '{channel}' is not supported",
+            context={"channel": channel, "valid_channels": sorted(_CHANNEL_PROMPTS.keys())},
         )
 
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        raise RuntimeError("ANTHROPIC_API_KEY not set")
+        raise MissingAPIKey("ANTHROPIC_API_KEY not set", context={"agent": "content_agent"})
 
     assets_text = load_assets(job.recommendation.topic, job.topic_asset_file)
     logger.debug("Assets loaded", extra={"context": {

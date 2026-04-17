@@ -24,6 +24,7 @@ load_dotenv()
 import anthropic
 from models import CustomerProfile, PRPlacement, TargetingJob, TargetingResult
 from core.logging import get_logger
+from errors.exceptions import AgentError, LLMParseError, MissingAPIKey
 
 logger = get_logger(__name__)
 
@@ -119,7 +120,7 @@ async def generate_targeting(job: TargetingJob) -> TargetingResult:
     """
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        raise RuntimeError("ANTHROPIC_API_KEY not set")
+        raise MissingAPIKey("ANTHROPIC_API_KEY not set", context={"agent": "targeting_agent"})
 
     client = anthropic.AsyncAnthropic(api_key=api_key)
     rec = job.recommendation
@@ -141,7 +142,14 @@ async def generate_targeting(job: TargetingJob) -> TargetingResult:
             system=_CUSTOMER_PROFILE_SYSTEM,
             messages=[{"role": "user", "content": user_msg}],
         )
-        data = json.loads(_strip_fences(message.content[0].text))
+        raw = _strip_fences(message.content[0].text)
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise LLMParseError(
+                "Targeting agent (customer_profile) returned invalid JSON",
+                context={"rec_priority": rec.priority, "raw_response": raw[:200]},
+            ) from exc
 
         profile = CustomerProfile(
             product=data["product"],
@@ -185,7 +193,14 @@ async def generate_targeting(job: TargetingJob) -> TargetingResult:
             system=_PR_PLACEMENT_SYSTEM,
             messages=[{"role": "user", "content": user_msg}],
         )
-        data = json.loads(_strip_fences(message.content[0].text))
+        raw = _strip_fences(message.content[0].text)
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise LLMParseError(
+                "Targeting agent (pr_placement) returned invalid JSON",
+                context={"rec_priority": rec.priority, "raw_response": raw[:200]},
+            ) from exc
 
         _fit = {"High": 0, "Medium": 1, "Low": 2}
         placements = sorted(
@@ -216,7 +231,7 @@ async def generate_targeting(job: TargetingJob) -> TargetingResult:
 
     # ------------------------------------------------------------------
     else:
-        raise ValueError(
-            f"Unknown targeting mode '{job.mode}'. "
-            f"Valid modes: customer_profile, pr_placement"
+        raise AgentError(
+            f"Unknown targeting mode '{job.mode}'",
+            context={"mode": job.mode, "valid_modes": ["customer_profile", "pr_placement"]},
         )

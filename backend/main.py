@@ -38,13 +38,14 @@ if _missing:
 if not os.environ.get("PERPLEXITY_API_KEY"):
     print("INFO: PERPLEXITY_API_KEY not set — Perplexity queries will be skipped.")
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 
 from agents import orchestrator
 from agents.content_agent import generate_content, load_assets
 from agents.targeting_agent import generate_targeting
+from errors.exceptions import AEOError, RunNotFound
 from models import ContentJob, Recommendation, TargetingJob
 from core.logging import get_logger, setup_logging
 
@@ -94,6 +95,19 @@ def _normalise_channel(ch: str) -> str | None:
 
 # ── App ────────────────────────────────────────────────────────────────────
 app = FastAPI(title="Bright AEO Engine", version="1.0.0")
+
+@app.exception_handler(AEOError)
+async def aeo_error_handler(request: Request, exc: AEOError) -> JSONResponse:
+    """Map any typed AEOError to the correct HTTP status code and JSON body."""
+    logger.error(
+        f"{exc.__class__.__name__}: {exc}",
+        extra={"context": {"path": request.url.path, **exc.context}},
+    )
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": str(exc), "error_type": exc.__class__.__name__},
+    )
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -199,7 +213,7 @@ def _save_config(config: dict) -> None:
 def _load_run(run_id: str) -> dict:
     path = RESULTS_DIR / f"{run_id}.json"
     if not path.exists():
-        raise HTTPException(status_code=404, detail=f"Run '{run_id}' not found")
+        raise RunNotFound(f"Run '{run_id}' not found", context={"run_id": run_id})
     return json.loads(path.read_text())
 
 

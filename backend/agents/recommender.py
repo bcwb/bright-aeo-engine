@@ -19,6 +19,7 @@ load_dotenv()
 import anthropic
 from models import AnalysisOutput, Recommendation, RecommendationsOutput
 from core.logging import get_logger
+from errors.exceptions import LLMParseError, MissingAPIKey
 
 logger = get_logger(__name__)
 
@@ -85,7 +86,7 @@ async def generate_recommendations(
     """
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
-        raise RuntimeError("ANTHROPIC_API_KEY not set")
+        raise MissingAPIKey("ANTHROPIC_API_KEY not set", context={"agent": "recommender"})
 
     logger.info("Generating recommendations", extra={"context": {
         "run_id": run_id, "topic_filter": topic_filter or "all",
@@ -151,9 +152,9 @@ async def generate_recommendations(
         logger.error("Recommendations parse failed", extra={"context": {
             "run_id": run_id, "error": str(exc), "raw_response": raw[:200],
         }})
-        raise RuntimeError(
-            f"Recommendations agent returned invalid JSON: {exc}\n"
-            f"Raw response (first 500 chars): {raw[:500]}"
+        raise LLMParseError(
+            f"Recommendations agent returned invalid JSON: {exc}",
+            context={"run_id": run_id, "raw_response": raw[:500]},
         ) from exc
 
     recommendations = [
