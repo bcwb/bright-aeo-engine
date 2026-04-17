@@ -32,6 +32,9 @@ load_dotenv()
 from models import QueryJob, QueryResult
 from agents import analyser, recommender
 from agents import query_claude, query_openai, query_gemini, query_perplexity
+from core.logging import get_logger
+
+logger = get_logger(__name__)
 
 RESULTS_DIR = Path(__file__).parent.parent / "results"
 ABORT_THRESHOLD = 0.30          # abort if >30% of calls fail
@@ -171,6 +174,13 @@ async def run_analysis(
     ]
     total = len(jobs)
 
+    logger.info("Run started", extra={"context": {
+        "run_id": run_id, "total_jobs": total,
+        "models": ",".join(active_models),
+        "prompts": len(active_prompts),
+        "topic_filter": topic_filter or "all",
+        "model_filter": model_filter or "all",
+    }})
     await progress_callback({
         "type": "started",
         "run_id": run_id,
@@ -180,6 +190,10 @@ async def run_analysis(
     })
 
     if total == 0:
+        logger.warning("Run aborted — nothing to run", extra={"context": {
+            "run_id": run_id, "active_prompts": len(active_prompts),
+            "active_models": len(active_models),
+        }})
         await progress_callback({
             "type": "error",
             "run_id": run_id,
@@ -233,6 +247,11 @@ async def run_analysis(
             and model_failed[m] / model_completed[m] > ABORT_THRESHOLD
         ]
         if len(models_over_threshold) == len(active_models):
+            logger.warning("Run aborted — all models exceeding failure threshold", extra={"context": {
+                "run_id": run_id, "failed": failed, "completed": completed,
+                "threshold_pct": int(ABORT_THRESHOLD * 100),
+                "models_over_threshold": ",".join(models_over_threshold),
+            }})
             aborted = True
 
         await progress_callback({
@@ -296,6 +315,14 @@ async def run_analysis(
         "message": f"Analysing {len(query_results)} responses...",
     })
     analysis = analyser.analyse(query_results, config)
+    logger.info("Analysis complete", extra={"context": {
+        "run_id": run_id,
+        "total_responses": analysis.total_responses,
+        "failed_calls": analysis.failed_calls,
+        "benchmark_brand": analysis.benchmark_brand,
+        "benchmark_rate_pct": round(analysis.bright_overall_rate * 100),
+        "watchouts": len(analysis.watchouts),
+    }})
 
     # ── 5. Recommendations ─────────────────────────────────────────────────
     await progress_callback({
@@ -307,8 +334,15 @@ async def run_analysis(
     recs_error = None
     try:
         recs = await recommender.generate_recommendations(analysis, run_id, topic_filter)
+        logger.info("Recommendations generated", extra={"context": {
+            "run_id": run_id,
+            "recommendation_count": len(recs.recommendations),
+        }})
     except Exception as e:
         recs_error = str(e)
+        logger.error("Recommendations failed", extra={"context": {
+            "run_id": run_id, "error": recs_error[:200],
+        }})
         await progress_callback({
             "type": "warning",
             "run_id": run_id,
@@ -339,6 +373,15 @@ async def run_analysis(
     _save_results(run_id, payload)
 
     # ── 7. Complete event ──────────────────────────────────────────────────
+    logger.info("Run complete", extra={"context": {
+        "run_id": run_id,
+        "status": "complete",
+        "duration_s": round(time.time() - start_time, 1),
+        "total_responses": analysis.total_responses,
+        "failed_calls": analysis.failed_calls,
+        "benchmark_rate_pct": round(analysis.bright_overall_rate * 100),
+        "cost_usd": round(running_cost, 4),
+    }})
     await progress_callback({
         "type": "complete",
         "run_id": run_id,

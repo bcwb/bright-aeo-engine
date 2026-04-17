@@ -23,6 +23,9 @@ load_dotenv()
 
 import anthropic
 from models import CustomerProfile, PRPlacement, TargetingJob, TargetingResult
+from core.logging import get_logger
+
+logger = get_logger(__name__)
 
 _MODEL = "claude-opus-4-6"
 
@@ -152,6 +155,10 @@ async def generate_targeting(job: TargetingJob) -> TargetingResult:
             expected_pool_size=data["expected_pool_size"],
             expected_yield=data["expected_yield"],
         )
+        logger.info("Targeting generated", extra={"context": {
+            "mode": "customer_profile", "rec_priority": rec.priority,
+            "topic": rec.topic, "product": data.get("product"),
+        }})
         return TargetingResult(
             recommendation_priority=rec.priority,
             mode="customer_profile",
@@ -196,6 +203,10 @@ async def generate_targeting(job: TargetingJob) -> TargetingResult:
             ],
             key=lambda p: (-p.citation_frequency, _fit.get(p.audience_fit, 3)),
         )
+        logger.info("Targeting generated", extra={"context": {
+            "mode": "pr_placement", "rec_priority": rec.priority,
+            "topic": rec.topic, "placements": len(placements),
+        }})
         return TargetingResult(
             recommendation_priority=rec.priority,
             mode="pr_placement",

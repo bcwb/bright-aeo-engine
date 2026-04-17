@@ -21,6 +21,9 @@ load_dotenv()
 
 import anthropic
 from models import ContentJob, ContentResult
+from core.logging import get_logger
+
+logger = get_logger(__name__)
 
 _MODEL = "claude-opus-4-6"
 
@@ -199,6 +202,11 @@ async def generate_content(job: ContentJob) -> ContentResult:
         raise RuntimeError("ANTHROPIC_API_KEY not set")
 
     assets_text = load_assets(job.recommendation.topic, job.topic_asset_file)
+    logger.debug("Assets loaded", extra={"context": {
+        "channel": channel, "topic": job.recommendation.topic,
+        "topic_asset": job.topic_asset_file or "none",
+    }})
+
     prompt = _build_prompt(job, assets_text)
 
     client = anthropic.AsyncAnthropic(api_key=api_key)
@@ -210,6 +218,11 @@ async def generate_content(job: ContentJob) -> ContentResult:
 
     content = message.content[0].text.strip()
     word_count = len(content.split())
+
+    logger.info("Content generated", extra={"context": {
+        "channel": channel, "rec_priority": job.recommendation.priority,
+        "topic": job.recommendation.topic, "word_count": word_count,
+    }})
 
     return ContentResult(
         recommendation_priority=job.recommendation.priority,

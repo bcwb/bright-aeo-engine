@@ -46,6 +46,10 @@ from agents import orchestrator
 from agents.content_agent import generate_content, load_assets
 from agents.targeting_agent import generate_targeting
 from models import ContentJob, Recommendation, TargetingJob
+from core.logging import get_logger, setup_logging
+
+setup_logging()
+logger = get_logger(__name__)
 
 # ── Paths ──────────────────────────────────────────────────────────────────
 CONFIG_PATH = Path(__file__).parent / "config.json"
@@ -228,6 +232,10 @@ async def add_prompt(prompt: dict):
         _ensure_peer_sets(config)
         _ensure_topic_assets(config)   # auto-create asset file for new topic
         _save_config(config)
+    logger.info("Config changed", extra={"context": {
+        "change_type": "add_prompt", "entity_id": prompt["id"],
+        "topic": prompt.get("topic"), "text": prompt.get("text", "")[:60],
+    }})
     return prompt
 
 
@@ -254,6 +262,9 @@ async def delete_prompt(prompt_id: str):
         if len(config["prompts"]) == before:
             raise HTTPException(status_code=404, detail=f"Prompt '{prompt_id}' not found")
         _save_config(config)
+    logger.info("Config changed", extra={"context": {
+        "change_type": "delete_prompt", "entity_id": prompt_id,
+    }})
     return {"deleted": prompt_id}
 
 
@@ -322,6 +333,10 @@ async def delete_competitor(competitor_id: str):
             config["peer_sets"][set_name] = [c for c in peers if c["id"] != competitor_id]
             if len(config["peer_sets"][set_name]) < before:
                 _save_config(config)
+                logger.info("Config changed", extra={"context": {
+                    "change_type": "delete_competitor", "entity_id": competitor_id,
+                    "peer_set": set_name,
+                }})
                 return {"deleted": competitor_id}
         raise HTTPException(status_code=404, detail=f"Competitor '{competitor_id}' not found")
 
@@ -333,8 +348,12 @@ async def update_benchmark_brand(body: dict):
         raise HTTPException(status_code=400, detail="name is required")
     async with _config_lock:
         config = _load_config()
+        previous = config.get("benchmark_brand", "Bright")
         config["benchmark_brand"] = name
         _save_config(config)
+    logger.info("Config changed", extra={"context": {
+        "change_type": "update_benchmark_brand", "previous": previous, "new": name,
+    }})
     return {"benchmark_brand": name}
 
 
@@ -397,6 +416,11 @@ async def trigger_run(body: dict = {}):
             await queue.put({"type": "error", "run_id": run_id, "message": str(e)})
 
     asyncio.create_task(_run_task())
+    logger.info("Run triggered", extra={"context": {
+        "run_id": run_id,
+        "topic_filter": topic_filter or "all",
+        "model_filter": model_filter or "all",
+    }})
 
     # Estimate call count for the UI cost preview
     active_prompts = [
@@ -705,6 +729,10 @@ async def approve_content(content_id: str, body: dict):
             item["reviewer_date"] = date.today().isoformat()
             item["status"] = "approved"
             _save_run(data["run_id"], data)
+            logger.info("Content approved", extra={"context": {
+                "content_id": content_id, "reviewer": reviewer_name,
+                "channel": item.get("channel"), "run_id": data["run_id"],
+            }})
             return item
 
     raise HTTPException(status_code=404, detail=f"Content item '{content_id}' not found")

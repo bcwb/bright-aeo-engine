@@ -18,6 +18,9 @@ load_dotenv()
 
 import anthropic
 from models import AnalysisOutput, Recommendation, RecommendationsOutput
+from core.logging import get_logger
+
+logger = get_logger(__name__)
 
 _MODEL = "claude-opus-4-6"
 
@@ -84,6 +87,11 @@ async def generate_recommendations(
     if not api_key:
         raise RuntimeError("ANTHROPIC_API_KEY not set")
 
+    logger.info("Generating recommendations", extra={"context": {
+        "run_id": run_id, "topic_filter": topic_filter or "all",
+        "total_responses": analysis.total_responses,
+    }})
+
     client = anthropic.AsyncAnthropic(api_key=api_key)
 
     analysis_payload = json.dumps(dataclasses.asdict(analysis), indent=2)
@@ -140,6 +148,9 @@ async def generate_recommendations(
     try:
         data = json.loads(raw)
     except json.JSONDecodeError as exc:
+        logger.error("Recommendations parse failed", extra={"context": {
+            "run_id": run_id, "error": str(exc), "raw_response": raw[:200],
+        }})
         raise RuntimeError(
             f"Recommendations agent returned invalid JSON: {exc}\n"
             f"Raw response (first 500 chars): {raw[:500]}"
