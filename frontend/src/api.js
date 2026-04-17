@@ -118,6 +118,18 @@ export const approveContent = (contentId, reviewerName) =>
 export const getTargeting = (runId) =>
   fetch(`${BASE}/targeting/${runId}`).then(json)
 
+// ── Logs ──────────────────────────────────────────────────────────────────
+
+export const getLogs = (level = null, limit = 200) => {
+  const params = new URLSearchParams()
+  if (level) params.set('level', level)
+  params.set('limit', limit)
+  return fetch(`${BASE}/logs?${params}`).then(json)
+}
+
+export const clearLogs = () =>
+  fetch(`${BASE}/logs`, { method: 'DELETE' })
+
 // ── Assets ────────────────────────────────────────────────────────────────
 
 export const openAsset = (file) =>

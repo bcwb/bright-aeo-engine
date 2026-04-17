@@ -12,6 +12,7 @@ export default defineConfig({
       '/content': 'http://localhost:8000',
       '/targeting': 'http://localhost:8000',
       '/assets':    'http://localhost:8000',
+      '/logs':      'http://localhost:8000',
     },
   },
 })

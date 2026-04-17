@@ -90,6 +90,11 @@ class RunNotFound(RunError):
     status_code = 404
 
 
+class RecommendationsNotFound(RunError):
+    """The run exists but recommendations have not been generated yet."""
+    status_code = 404
+
+
 class NoActivePrompts(RunError):
     """The run was started but no prompts match the current filter."""
     status_code = 422
@@ -112,6 +117,11 @@ class ContentError(AEOError):
 class ChannelNotSupported(ContentError):
     """The requested content channel is not in the valid set."""
     status_code = 400
+
+
+class ContentItemNotFound(ContentError):
+    """No content item with the given ID exists in any run."""
+    status_code = 404
 
 
 # ---------------------------------------------------------------------------

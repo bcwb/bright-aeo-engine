@@ -4,6 +4,8 @@ import os
 import sys
 import time
 
+from agents.registry import register as _register
+
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 from dotenv import load_dotenv
@@ -64,3 +66,6 @@ async def query(job: QueryJob) -> QueryResult:
             model=job.model, response_text="", status="error",
             error=str(e), tokens_used=0, latency_ms=latency_ms,
         )
+
+
+_register("openai", "OPENAI_API_KEY", 0.000010, sys.modules[__name__])

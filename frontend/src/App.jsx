@@ -2,11 +2,13 @@ import { useState } from 'react'
 import Configure from './tabs/Configure'
 import Run from './tabs/Run'
 import Insights from './tabs/Insights'
+import Monitor from './tabs/Monitor'
 
 const TABS = [
   { id: 'configure', label: 'Configure' },
   { id: 'run',       label: 'Run' },
   { id: 'insights',  label: 'Insights' },
+  { id: 'monitor',   label: 'Monitor' },
 ]
 
 // WCAG AA contrast rules for brand palette:
@@ -86,6 +88,7 @@ export default function App() {
               onSelectRun={setSelectedRunId}
             />
           )}
+          {activeTab === 'monitor'   && <Monitor />}
         </div>
       </main>
     </div>

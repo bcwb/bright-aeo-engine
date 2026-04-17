@@ -16,13 +16,13 @@ progress_callback must be an async callable that accepts a dict.
 
 import asyncio
 import dataclasses
-import json
 import os
 import sys
 import time
 import uuid
 from datetime import date
 from pathlib import Path
+
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
@@ -31,29 +31,19 @@ load_dotenv()
 
 from models import QueryJob, QueryResult
 from agents import analyser, recommender
-from agents import query_claude, query_openai, query_gemini, query_perplexity
+# Import all query agents to trigger self-registration
+from agents import query_claude, query_openai, query_gemini, query_perplexity  # noqa: F401
+from agents import registry
 from core.logging import get_logger
+from repositories.results_repository import ResultsRepository
 
 logger = get_logger(__name__)
 
-RESULTS_DIR = Path(__file__).parent.parent / "results"
+_results_repo = ResultsRepository(Path(__file__).parent.parent / "results")
+
 ABORT_THRESHOLD = 0.30          # abort if >30% of calls fail
 MAX_CONCURRENT_PER_MODEL = 3
 INTER_CALL_DELAY = 1.0          # seconds between calls to same model
-
-_QUERY_AGENTS = {
-    "claude":     query_claude,
-    "openai":     query_openai,
-    "gemini":     query_gemini,
-    "perplexity": query_perplexity,
-}
-
-_COST_PER_TOKEN = {
-    "claude":     0.000060,
-    "openai":     0.000010,
-    "gemini":     0.000004,
-    "perplexity": 0.000001,
-}
 
 
 # ---------------------------------------------------------------------------
@@ -97,12 +87,6 @@ def _top_n_brands(text: str, brand_map: dict[str, list[str]], n: int = 3) -> lis
     return seen
 
 
-def _save_results(run_id: str, payload: dict) -> None:
-    RESULTS_DIR.mkdir(exist_ok=True)
-    (RESULTS_DIR / f"{run_id}.json").write_text(
-        json.dumps(payload, indent=2, default=str)
-    )
-
 
 # ---------------------------------------------------------------------------
 # Main entry point
@@ -129,28 +113,9 @@ async def run_analysis(
         if p.get("active", True)
         and (topic_filter is None or p["topic"] == topic_filter)
     ]
-    active_models = [
-        m for m, cfg in config["models"].items()
-        if cfg.get("enabled", True)
-        and (model_filter is None or m == model_filter)
-        and m in _QUERY_AGENTS
-        and os.environ.get(f"{m.upper()}_API_KEY") or (
-            m == "claude" and os.environ.get("ANTHROPIC_API_KEY")
-        )
-    ]
-
-    # Filter out models whose key is definitely missing
-    keyed_models = []
-    key_map = {
-        "claude": "ANTHROPIC_API_KEY",
-        "openai": "OPENAI_API_KEY",
-        "gemini": "GOOGLE_API_KEY",
-        "perplexity": "PERPLEXITY_API_KEY",
-    }
-    for m in active_models:
-        if os.environ.get(key_map.get(m, "")):
-            keyed_models.append(m)
-    active_models = keyed_models
+    active_registrations = registry.get_active(config, model_filter)
+    active_models = [r.name for r in active_registrations]
+    agent_map = {r.name: r for r in active_registrations}
 
     all_peer_names = [
         p["name"]
@@ -229,7 +194,7 @@ async def run_analysis(
             if gap > 0:
                 await asyncio.sleep(gap)
             last_call_time[job.model] = time.time()
-            result = await _QUERY_AGENTS[job.model].query(job)
+            result = await agent_map[job.model].module.query(job)
 
         completed += 1
         model_completed[job.model] += 1
@@ -237,7 +202,7 @@ async def run_analysis(
             failed += 1
             model_failed[job.model] += 1
         else:
-            running_cost += result.tokens_used * _COST_PER_TOKEN.get(job.model, 0)
+            running_cost += result.tokens_used * agent_map[job.model].cost_per_token
 
         # Abort only if ALL models are failing above the threshold — one bad
         # model (e.g. quota exceeded on OpenAI) should not kill a healthy run.
@@ -296,7 +261,7 @@ async def run_analysis(
                 "failed_calls": failed,
             },
         }
-        _save_results(run_id, payload)
+        _results_repo.save(run_id, payload)
         await progress_callback({
             "type": "error",
             "run_id": run_id,
@@ -370,7 +335,7 @@ async def run_analysis(
             "failed_calls": failed,
         },
     }
-    _save_results(run_id, payload)
+    _results_repo.save(run_id, payload)
 
     # ── 7. Complete event ──────────────────────────────────────────────────
     logger.info("Run complete", extra={"context": {

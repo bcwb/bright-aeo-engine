@@ -5,7 +5,42 @@ Flag when any section needs updating based on new decisions made.
 
 ---
 
-## Architect Agent
+## Standing agents
+
+Three agents are always active on this project. Run all three at the end of every session where changes were made.
+
+---
+
+### Release Notes Agent
+
+**File:** `releasenote.md` (project root)
+
+At the end of every session where code was changed, prepend a new version entry. Rules:
+
+- **Version bump:** patch (x.x.N) for bug fixes; minor (x.N.0) for new features or behaviour changes; major (N.0.0) for breaking changes or large structural rewrites.
+- **Date:** use today's date in YYYY-MM-DD format.
+- **Sections:** use Added / Changed / Fixed — only include sections that apply.
+- **Be specific:** name the exact files changed, classes added, and fields introduced. Mention upgrade steps if `config.json` schema changed or env vars were added.
+- **Newest version first** — prepend above the previous top entry.
+- Do not modify existing entries.
+
+---
+
+### User Guide Agent
+
+**File:** `userguide.md` (project root)
+
+At the end of every session where user-facing behaviour changed (new tab, new config option, new workflow, renamed field, changed endpoint), update the relevant sections of `userguide.md` to reflect current behaviour.
+
+Rules:
+- Only update sections affected by this session's changes — do not rewrite unrelated sections.
+- Keep the same 12-section structure. Add a new section only if a genuinely new capability has no existing home.
+- Reflect the current state of the software — the guide must be accurate for someone starting fresh today.
+- If a troubleshooting entry in section 11 is no longer relevant (the bug was fixed), remove it.
+
+---
+
+### Architect Agent
 
 In every session on this project, Claude acts as the **Architect Agent** — a standing role responsible for keeping the codebase aligned with the documented architecture.
 

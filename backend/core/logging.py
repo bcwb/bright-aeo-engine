@@ -13,13 +13,67 @@ Environment variables:
 
 Dev format  — coloured, human-readable, one or two lines per event.
 JSON format — one JSON object per line, for log aggregators (Datadog, CloudWatch, etc.)
+
+In-memory buffer:
+    All events are also captured in `log_buffer` (ring buffer, last 500 events).
+    Exposed via GET /logs endpoint for the Monitor UI.
 """
 
+import collections
 import json
 import logging
 import os
 import sys
+import threading
 from datetime import datetime, timezone
+
+
+# ---------------------------------------------------------------------------
+# In-memory log buffer
+# ---------------------------------------------------------------------------
+
+class _LogBuffer:
+    """Thread-safe ring buffer — stores the last N structured log events."""
+
+    def __init__(self, maxlen: int = 500) -> None:
+        self._buffer: collections.deque = collections.deque(maxlen=maxlen)
+        self._lock = threading.Lock()
+
+    def append(self, entry: dict) -> None:
+        with self._lock:
+            self._buffer.append(entry)
+
+    def get_all(self) -> list[dict]:
+        with self._lock:
+            return list(self._buffer)
+
+    def clear(self) -> None:
+        with self._lock:
+            self._buffer.clear()
+
+
+# Module-level singleton — imported by main.py to serve GET /logs
+log_buffer = _LogBuffer()
+
+
+class _BufferingHandler(logging.Handler):
+    """Logging handler that writes structured events into log_buffer."""
+
+    def __init__(self, buffer: _LogBuffer) -> None:
+        super().__init__(level=logging.DEBUG)
+        self._buffer = buffer
+
+    def emit(self, record: logging.LogRecord) -> None:
+        ctx = getattr(record, "context", {})
+        # Strip 'aeo.' prefix from logger name for cleaner display
+        name = record.name.removeprefix("aeo.")
+        self._buffer.append({
+            "ts":     datetime.now(timezone.utc).isoformat(),
+            "level":  record.levelname,
+            "logger": name,
+            "event":  record.getMessage(),
+            **ctx,
+        })
 
 
 # ---------------------------------------------------------------------------
@@ -108,6 +162,11 @@ def setup_logging() -> None:
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(_JSONFormatter() if fmt == "json" else _DevFormatter())
     logger.addHandler(handler)
+
+    # Always attach the buffer handler so the Monitor UI can read events
+    buf_handler = _BufferingHandler(log_buffer)
+    logger.addHandler(buf_handler)
+
     logger.propagate = False
 
 
