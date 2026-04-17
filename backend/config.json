@@ -1,0 +1,465 @@
+{
+  "benchmark_brand": "Bright",
+  "prompts": [
+    {
+      "id": "p01",
+      "topic": "Payroll",
+      "text": "best payroll software for uk accountancy bureaus 2026",
+      "active": true
+    },
+    {
+      "id": "p02",
+      "topic": "Payroll",
+      "text": "payroll software with cis support uk",
+      "active": true
+    },
+    {
+      "id": "p03",
+      "topic": "Payroll",
+      "text": "bureau payroll software with employee portal uk",
+      "active": true
+    },
+    {
+      "id": "p04",
+      "topic": "Payroll",
+      "text": "payroll software for accountants managing multiple clients uk",
+      "active": true
+    },
+    {
+      "id": "p05",
+      "topic": "Payroll",
+      "text": "cloud payroll software for uk practices",
+      "active": true
+    },
+    {
+      "id": "p06",
+      "topic": "Payroll",
+      "text": "best payroll software for bureau efficiency",
+      "active": true
+    },
+    {
+      "id": "p07",
+      "topic": "Payroll",
+      "text": "payroll software with auto enrolment uk bureau",
+      "active": true
+    },
+    {
+      "id": "p08",
+      "topic": "Payroll",
+      "text": "brightpay cloud alternative uk bureau",
+      "active": true
+    },
+    {
+      "id": "pm01",
+      "topic": "Practice Management",
+      "text": "best practice management software for uk accountants",
+      "active": true
+    },
+    {
+      "id": "pm02",
+      "topic": "Practice Management",
+      "text": "top practice management tools ranked for accountants ireland",
+      "active": true
+    },
+    {
+      "id": "pm03",
+      "topic": "Practice Management",
+      "text": "practice management software with client portal uk",
+      "active": true
+    },
+    {
+      "id": "pm04",
+      "topic": "Practice Management",
+      "text": "practice management software for small accountancy firms uk",
+      "active": true
+    },
+    {
+      "id": "t01",
+      "topic": "Tax Compliance",
+      "text": "best tax software for uk accountants",
+      "active": true
+    },
+    {
+      "id": "t02",
+      "topic": "Tax Compliance",
+      "text": "accounts production software uk practice",
+      "active": true
+    },
+    {
+      "id": "t04",
+      "topic": "Tax Compliance",
+      "text": "tax compliance software for uk accountancy practices",
+      "active": true
+    },
+    {
+      "id": "t05",
+      "topic": "Tax Compliance",
+      "text": "mtd itsa compliant software uk accountants",
+      "active": true
+    },
+    {
+      "id": "ca01",
+      "topic": "Cloud Accounting",
+      "text": "cloud accounting software for uk accountants",
+      "active": true
+    },
+    {
+      "id": "ca02",
+      "topic": "Cloud Accounting",
+      "text": "accounting software with payroll integration uk practice",
+      "active": true
+    },
+    {
+      "id": "ca03",
+      "topic": "Cloud Accounting",
+      "text": "compare cloud accounting tools for uk bureaux",
+      "active": true
+    },
+    {
+      "topic": "Tax Compliance",
+      "text": "Corporation Tax Software for UK Accountants",
+      "active": true,
+      "id": "f6aa9d79"
+    },
+    {
+      "topic": "Tax Compliance",
+      "text": "Self Assessment Software for UK Accountants",
+      "active": true,
+      "id": "2256ea03"
+    },
+    {
+      "topic": "Tax Compliance",
+      "text": "Partnership Tax software for UK Accountants",
+      "active": true,
+      "id": "b976126d"
+    },
+    {
+      "topic": "Tax Compliance",
+      "text": "best product for UK Accountants to use for MTDITSA",
+      "active": true,
+      "id": "a7a26c97"
+    },
+    {
+      "topic": "Payroll",
+      "text": "Payroll solutions with automation and AI",
+      "active": true,
+      "id": "d49377a7"
+    },
+    {
+      "topic": "Practice Management",
+      "text": "Ai and automation in practice management",
+      "active": true,
+      "id": "3a363a30"
+    },
+    {
+      "topic": "Software Group AI Capability",
+      "text": "What accounting software has the best AI features in 2026",
+      "active": true,
+      "id": "d26405fa"
+    },
+    {
+      "topic": "Software Group AI Capability",
+      "text": "Which practice management tools are using AI to automate tasks and onboarding",
+      "active": true,
+      "id": "fdea5ed2"
+    },
+    {
+      "topic": "Software Group AI Capability",
+      "text": "best AI-powered tax software for UK accountants?",
+      "active": true,
+      "id": "8d54b33a"
+    }
+  ],
+  "peer_sets": {
+    "payroll": [
+      {
+        "id": "pay01",
+        "name": "BrightPay",
+        "variants": [
+          "BrightPay",
+          "Bright Pay",
+          "brightpay.co.uk",
+          "brightsg.com"
+        ]
+      },
+      {
+        "id": "pay02",
+        "name": "Sage Payroll",
+        "variants": [
+          "Sage Payroll",
+          "Sage"
+        ]
+      },
+      {
+        "id": "pay03",
+        "name": "Staffology",
+        "variants": [
+          "Staffology"
+        ]
+      },
+      {
+        "id": "pay04",
+        "name": "Xero Payroll",
+        "variants": [
+          "Xero Payroll",
+          "Xero"
+        ]
+      },
+      {
+        "id": "pay05",
+        "name": "Moneysoft",
+        "variants": [
+          "Moneysoft"
+        ]
+      },
+      {
+        "id": "pay06",
+        "name": "Employment Hero",
+        "variants": [
+          "Employment Hero"
+        ]
+      },
+      {
+        "id": "pay07",
+        "name": "FreshPay",
+        "variants": [
+          "FreshPay"
+        ]
+      },
+      {
+        "id": "pay08",
+        "name": "Qtac",
+        "variants": [
+          "Qtac"
+        ]
+      }
+    ],
+    "practice_management": [
+      {
+        "id": "pm01",
+        "name": "Bright",
+        "variants": [
+          "Bright",
+          "BrightManager",
+          "BrightTax",
+          "BrightAccountsProduction",
+          "BrightCoSec"
+        ]
+      },
+      {
+        "id": "pm02",
+        "name": "TaxCalc",
+        "variants": [
+          "TaxCalc"
+        ]
+      },
+      {
+        "id": "pm03",
+        "name": "Iris Practice Solutions",
+        "variants": [
+          "Iris Practice Solutions",
+          "Iris"
+        ]
+      },
+      {
+        "id": "pm04",
+        "name": "CCH",
+        "variants": [
+          "CCH",
+          "Wolters Kluwer"
+        ]
+      },
+      {
+        "id": "pm05",
+        "name": "Karbon",
+        "variants": [
+          "Karbon"
+        ]
+      },
+      {
+        "id": "pm06",
+        "name": "Capium",
+        "variants": [
+          "Capium"
+        ]
+      },
+      {
+        "name": "Xero",
+        "variants": [
+          "Xero Practice Management",
+          "Hubdoc",
+          "Xero Workpapers",
+          "Xero Tax",
+          "Xero Accounts Production",
+          "Company Accounts"
+        ],
+        "peer_set": "practice_management",
+        "id": "dbb7e718"
+      },
+      {
+        "name": "Sodium",
+        "variants": [
+          "Practice Management"
+        ],
+        "peer_set": "practice_management",
+        "id": "f0607e1e"
+      },
+      {
+        "name": "Engager",
+        "variants": [
+          "Engager.io"
+        ],
+        "peer_set": "practice_management",
+        "id": "ab793e33"
+      }
+    ],
+    "tax_compliance": [
+      {
+        "name": "TaxCalc",
+        "variants": [
+          "Taxcalc"
+        ],
+        "peer_set": "tax_compliance",
+        "id": "0bcd6627"
+      },
+      {
+        "name": "Sage",
+        "variants": [
+          "Sage"
+        ],
+        "peer_set": "tax_compliance",
+        "id": "386eed35"
+      }
+    ],
+    "cloud_accounting": [
+      {
+        "name": "Xero",
+        "variants": [
+          "Xero Bookkeeping"
+        ],
+        "peer_set": "cloud_accounting",
+        "id": "489853f2"
+      },
+      {
+        "name": "Intuit",
+        "variants": [
+          "Quickbooks"
+        ],
+        "peer_set": "cloud_accounting",
+        "id": "13cf08e2"
+      },
+      {
+        "name": "Freeagent",
+        "variants": [
+          "Freeagent"
+        ],
+        "peer_set": "cloud_accounting",
+        "id": "3ba632ea"
+      }
+    ],
+    "software_group_ai_capability": [
+      {
+        "name": "Xero",
+        "variants": [
+          "Xero"
+        ],
+        "peer_set": "software_group_ai_capability",
+        "id": "b357b949"
+      },
+      {
+        "name": "TaxCalc",
+        "variants": [
+          "Taxcalc"
+        ],
+        "peer_set": "software_group_ai_capability",
+        "id": "f7d01347"
+      },
+      {
+        "name": "Silverfin",
+        "variants": [
+          "Silverfin"
+        ],
+        "peer_set": "software_group_ai_capability",
+        "id": "ed526606"
+      },
+      {
+        "name": "CCH",
+        "variants": [
+          "CCH"
+        ],
+        "peer_set": "software_group_ai_capability",
+        "id": "0ecf12f4"
+      },
+      {
+        "name": "Iris",
+        "variants": [
+          "Iris Elements"
+        ],
+        "peer_set": "software_group_ai_capability",
+        "id": "9157c716"
+      },
+      {
+        "name": "Karbon",
+        "variants": [
+          "Karbon"
+        ],
+        "peer_set": "software_group_ai_capability",
+        "id": "80cd6944"
+      },
+      {
+        "name": "Sage",
+        "variants": [
+          "Sage Payroll"
+        ],
+        "peer_set": "software_group_ai_capability",
+        "id": "965ce19f"
+      },
+      {
+        "name": "Intuit",
+        "variants": [
+          "Intuit"
+        ],
+        "peer_set": "software_group_ai_capability",
+        "id": "aff112fa"
+      }
+    ]
+  },
+  "brand_variants": {
+    "Bright": [
+      "Bright",
+      "BrightPay",
+      "Bright Pay",
+      "brightpay.co.uk",
+      "brightsg.com",
+      "BrightManager",
+      "BrightTax",
+      "BrightAccountsProduction",
+      "BrightCoSec"
+    ]
+  },
+  "models": {
+    "claude": {
+      "enabled": true,
+      "model_string": "claude-opus-4-6"
+    },
+    "openai": {
+      "enabled": false,
+      "model_string": "gpt-4o"
+    },
+    "gemini": {
+      "enabled": true,
+      "model_string": "gemini-1.5-pro"
+    },
+    "perplexity": {
+      "enabled": false,
+      "model_string": "llama-3.1-sonar-large-128k-online"
+    }
+  },
+  "topic_assets": {
+    "payroll": "product-descriptions/brightpay-cloud.md",
+    "practice_management": "product-descriptions/brightmanager.md",
+    "tax_compliance": "product-descriptions/brighttax.md",
+    "cloud_accounting": "product-descriptions/brightaccounts.md",
+    "software_group_ai_capability": "product-descriptions/software_group_ai_capability.md"
+  }
+}

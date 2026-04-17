@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200">
+  <!-- Navy background -->
+  <rect width="800" height="200" fill="#0F2B3D"/>
+  <!-- Decorative diamond shapes (from banner) -->
+  <rect x="680" y="30" width="44" height="44" rx="4" fill="none" stroke="#E6D600" stroke-width="3" transform="rotate(45 702 52)"/>
+  <rect x="620" y="30" width="44" height="44" rx="4" fill="none" stroke="#E39400" stroke-width="3" transform="rotate(45 642 52)"/>
+  <!-- Orange arc shape -->
+  <path d="M 120 200 Q 200 60 280 200" stroke="#E39400" stroke-width="18" fill="none" stroke-linecap="round"/>
+  <!-- Blue arc -->
+  <path d="M 60 200 Q 140 80 220 200" stroke="#009FC7" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.4"/>
+</svg>

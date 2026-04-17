@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 100" width="520" height="100" font-family="Arial, Calibri, sans-serif">
+
+  <!-- Background -->
+  <rect width="520" height="100" fill="#ffffff" rx="8" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Label -->
+  <text x="20" y="22" font-size="10" fill="#999" letter-spacing="1" font-weight="700">CALLS TO ACTION</text>
+
+  <!-- Primary: Book a Demo -->
+  <rect x="20" y="34" width="130" height="40" rx="6" fill="#009FC7"/>
+  <text x="85" y="59" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Book a Demo</text>
+
+  <!-- Primary: Get Started -->
+  <rect x="165" y="34" width="120" height="40" rx="6" fill="#009FC7"/>
+  <text x="225" y="59" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Get Started</text>
+
+  <!-- Secondary: Find Out More -->
+  <rect x="300" y="34" width="140" height="40" rx="6" fill="none" stroke="#009FC7" stroke-width="2"/>
+  <text x="370" y="59" text-anchor="middle" font-size="13" font-weight="700" fill="#009FC7">Find Out More</text>
+
+  <!-- Labels -->
+  <text x="85" y="90" text-anchor="middle" font-size="9" fill="#aaa">Primary CTA</text>
+  <text x="225" y="90" text-anchor="middle" font-size="9" fill="#aaa">Primary CTA</text>
+  <text x="370" y="90" text-anchor="middle" font-size="9" fill="#aaa">Secondary CTA</text>
+
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 280" width="560" height="280" font-family="Arial, Calibri, sans-serif">
+
+  <!-- Background -->
+  <rect width="560" height="280" fill="#ffffff" rx="8" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Label -->
+  <text x="24" y="30" font-size="10" fill="#999" letter-spacing="1" font-weight="700">TYPOGRAPHY SCALE</text>
+  <line x1="24" y1="38" x2="536" y2="38" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- H1 -->
+  <text x="24" y="72" font-size="30" font-weight="700" fill="#0F2B3D">Heading One — 30px / 700</text>
+  <text x="24" y="86" font-size="10" fill="#aaa">H1 · Navy #0F2B3D · Bold</text>
+
+  <!-- H2 -->
+  <text x="24" y="118" font-size="22" font-weight="700" fill="#009FC7">Heading Two — 22px / 700</text>
+  <text x="24" y="132" font-size="10" fill="#aaa">H2 · Blue #009FC7 · Bold</text>
+
+  <!-- H3 -->
+  <text x="24" y="160" font-size="18" font-weight="600" fill="#0F2B3D">Heading Three — 18px / 600</text>
+  <text x="24" y="174" font-size="10" fill="#aaa">H3 · Navy #0F2B3D · Semi-bold</text>
+
+  <!-- Body -->
+  <text x="24" y="202" font-size="15" font-weight="400" fill="#0F2B3D">Body text — 15px / 400 / line-height 1.7</text>
+  <text x="24" y="218" font-size="10" fill="#aaa">Body · Navy #0F2B3D · Regular</text>
+
+  <!-- Caption -->
+  <text x="24" y="244" font-size="12" font-weight="400" fill="#888">Caption and label text — 12px / 400</text>
+  <text x="24" y="258" font-size="10" fill="#aaa">Caption · Muted grey · Regular</text>
+
+  <!-- Fallback note -->
+  <text x="24" y="275" font-size="9" fill="#bbb">Fallback stack: Arial, Calibri, sans-serif</text>
+
+</svg>
