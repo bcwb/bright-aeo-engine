@@ -183,7 +183,7 @@ export default function SentimentSnippets({ analysis, queryResults = [], benchma
                             </p>
                             {sources.length > 0 && (
                               <div>
-                                <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1.5">
+                                <div className="text-xs font-semibold text-gray-400 mb-1.5">
                                   Sources
                                 </div>
                                 <div className="flex flex-col gap-1.5">

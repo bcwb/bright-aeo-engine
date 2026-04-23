@@ -71,7 +71,7 @@ export default function Insights({ selectedRunId, onSelectRun }) {
   return (
     <div className="p-8 max-w-5xl">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold text-brand-navy">Insights</h1>
+        <h1 className="text-2xl font-bold text-brand-navy font-heading">Insights</h1>
         <select
           value={selectedRunId || ''}
           onChange={e => onSelectRun(e.target.value)}
@@ -142,12 +142,12 @@ export default function Insights({ selectedRunId, onSelectRun }) {
                 </div>
               </>
             ) : (
-              <div className="p-4 bg-brand-orange/10 border border-brand-orange/20 rounded-lg text-sm text-brand-orange">
+              <div className="p-4 bg-bright-red-1 border border-bright-red-2/40 rounded-lg text-sm text-bright-red-3">
                 Recommendations failed to generate for this run.
                 {runData?.recommendations_error && (
                   <details className="mt-2">
-                    <summary className="cursor-pointer text-xs text-brand-orange/70">Show error</summary>
-                    <pre className="mt-1 text-xs whitespace-pre-wrap break-all text-brand-orange/80">
+                    <summary className="cursor-pointer text-xs text-bright-red-3/70">Show error</summary>
+                    <pre className="mt-1 text-xs whitespace-pre-wrap break-all text-bright-red-3/80">
                       {runData.recommendations_error}
                     </pre>
                   </details>
@@ -175,7 +175,7 @@ export default function Insights({ selectedRunId, onSelectRun }) {
 
 function SectionTitle({ children }) {
   return (
-    <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+    <h2 className="text-xs font-semibold text-gray-500 mb-4 flex items-center gap-2">
       {children}
     </h2>
   )

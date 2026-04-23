@@ -50,7 +50,7 @@ export default function ContentQueue({ items, runId, onApprove }) {
                   {item.human_review_required && item.status !== 'approved' && (
                     <div className="flex items-center gap-2 px-4 py-2 bg-brand-orange/10 border-b border-brand-orange/20">
                       <span className="text-brand-orange text-sm">⚠</span>
-                      <span className="text-xs font-medium text-brand-orange uppercase tracking-wide">
+                      <span className="text-xs font-medium text-brand-orange">
                         Human review required before posting
                       </span>
                     </div>

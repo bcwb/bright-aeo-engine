@@ -4,10 +4,12 @@
 
 @layer base {
   body {
-    @apply antialiased;
+    @apply antialiased text-base leading-6;
+    font-family: "Open Sans", system-ui, sans-serif;
     color: #0F2B3D;
   }
-  h1, h2, h3, h4 {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Museo Sans", Nunito, system-ui, sans-serif;
     color: #0F2B3D;
   }
 }

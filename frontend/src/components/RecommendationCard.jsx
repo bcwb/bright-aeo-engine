@@ -84,12 +84,12 @@ export default function RecommendationCard({ rec, generating, onGenerate }) {
       {expanded && (
         <div className="px-5 pb-4 border-t border-gray-100">
           <div className="py-3">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Action</div>
+            <div className="text-xs font-semibold text-gray-500 mb-1">Action</div>
             <p className="text-sm text-gray-900 font-medium">{rec.action}</p>
           </div>
 
           <div className="py-2 border-t border-gray-100">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Channels</div>
+            <div className="text-xs font-semibold text-gray-500 mb-2">Channels</div>
             <div className="flex flex-wrap gap-1.5">
               {ALL_CHANNELS.map(ch => (
                 <button

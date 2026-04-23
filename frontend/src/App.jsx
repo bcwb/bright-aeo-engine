@@ -42,7 +42,7 @@ export default function App() {
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
       {/* ── Sidebar ── */}
-      <aside className="w-52 flex flex-col shrink-0" style={{ backgroundColor: '#265AB2' }}>
+      <aside className="w-52 flex flex-col shrink-0 bg-brand-navy">
         <BrightLogo />
         {/* Brand gradient accent bar under logo */}
         <div

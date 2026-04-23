@@ -55,7 +55,7 @@ function Card({ label, value, sub, highlight, warn }) {
       warn ? 'border-brand-orange/40' : highlight ? 'border-brand-blue/40' : 'border-gray-200'
     }`}>
       <div className="text-xs font-medium text-gray-500 mb-1">{label}</div>
-      <div className={`font-mono text-2xl font-medium ${
+      <div className={`font-heading font-bold text-2xl ${
         warn ? 'text-brand-orange' : highlight ? 'text-brand-blue' : 'text-brand-navy'
       }`}>
         {value}

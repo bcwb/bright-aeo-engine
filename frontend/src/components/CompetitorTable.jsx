@@ -49,7 +49,7 @@ export default function CompetitorTable({ title, peerSetKey, peers, onChange }) 
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
       <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50">
-        <span className="text-xs font-semibold text-gray-600 uppercase tracking-wide">{title}</span>
+        <span className="text-xs font-semibold text-gray-600">{title}</span>
       </div>
       <table className="w-full text-sm">
         <thead>

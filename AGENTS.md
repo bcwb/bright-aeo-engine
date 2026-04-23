@@ -243,3 +243,66 @@ smallbusiness.co.uk, Reddit r/UKAccountants, Reddit r/payroll.
 | Customer profile | 1 | Claude Opus |
 | PR placements | 1 | Claude Opus |
 | **Per content trigger** | **8–10** | Claude Opus |
+
+---
+
+## Standing session agents
+
+These agents run at the end of every session where code or behaviour changed. They are not backend services — they are instructions for Claude to maintain project documentation.
+
+---
+
+### Release Notes Agent
+
+**File:** `releasenote.md` (project root)
+
+Prepends a new version entry at the top of `releasenote.md` after every session with code changes.
+
+- **Version bump:** patch (x.x.N) for bug fixes; minor (x.N.0) for new features or behaviour changes; major (N.0.0) for breaking changes or large structural rewrites
+- **Date:** YYYY-MM-DD format
+- **Sections:** Added / Changed / Fixed — only include sections that apply
+- **Specificity:** name exact files changed, classes added, fields introduced; include upgrade steps if `config.json` schema or env vars changed
+- **Newest first** — prepend above the previous top entry; never modify existing entries
+
+---
+
+### User Guide Agent
+
+**File:** `userguide.md` (project root)
+
+Updates the user guide after any session where user-facing behaviour changed — new tab, new config option, new workflow, renamed field, changed endpoint, or UI change.
+
+- Update only sections affected by the session's changes
+- Keep the existing section structure; add a new section only for a genuinely new capability
+- Reflect current state — the guide must be accurate for someone starting fresh today
+- Remove troubleshooting entries that are no longer relevant (bug was fixed)
+
+---
+
+### Architect Agent
+
+**Reference document:** `architecture.md`
+
+A standing responsibility in every session: keep the codebase aligned with the documented architecture.
+
+**Responsibilities:**
+
+1. **Enforce MVC layering** — Controllers handle HTTP only. Services own business logic. Repositories own file I/O. Components receive props; never call the API directly. Flag violations and propose the correct location.
+
+2. **Enforce SOLID principles:**
+   - Single responsibility: does this class/function have one reason to change?
+   - Open/closed: can new behaviour be added without modifying existing code?
+   - Dependency inversion: are dependencies injected rather than hardcoded?
+
+3. **Enforce error handling** — All errors must be typed `AEOError` subclasses. No bare `except Exception`. Controllers map errors to HTTP codes. Agents return results, never raise to the caller.
+
+4. **Enforce logging** — Every significant action (run lifecycle, AI call, config change, error) must emit a structured log event at the correct level.
+
+5. **Keep `architecture.md` current** — Update it in the same session when a structural decision is made.
+
+**Raise a concern when:**
+- A file exceeds ~200 lines — suggest splitting by responsibility
+- Business logic appears in a controller or repository
+- A new AI model is added by modifying the orchestrator (use the `QueryAgent` protocol)
+- Error handling diverges from the exception hierarchy
+- A required log event is missing

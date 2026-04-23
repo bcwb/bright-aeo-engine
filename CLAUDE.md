@@ -113,6 +113,8 @@ IMPORTANT - when applying the brand guidelines never violate the accessibility r
 
 ## Brand Colours
 
+### Primary brand colours
+
 | Colour | Hex | RGB | Usage |
 |--------|-----|-----|-------|
 | **Navy** | `#0F2B3D` | rgb(15, 43, 61) | Primary text, headings, dark backgrounds |
@@ -126,18 +128,48 @@ IMPORTANT - when applying the brand guidelines never violate the accessibility r
 - Dark backgrounds must always use **Navy (#0F2B3D)** — never pure black (`#000000`)
 - Light text on dark backgrounds must be **white (#FFFFFF)**
 - All colour pairings must meet **WCAG AA minimum contrast** ratio
-- Never introduce off-brand colours — only the four brand colours above
+- Use the extended tints/shades palette for subtle UI states (hover, active, disabled, backgrounds)
 
 ### Colour Gradient
 
 The brand gradient runs: Navy → Blue → Orange → Yellow  
 CSS: `linear-gradient(90deg, #0F2B3D 0%, #009FC7 40%, #E39400 75%, #E6D600 100%)`
 
-![Bright gradient](assets/images/bright-gradient.png)
+### Extended tints/shades palette (from Figma design system)
 
-### Colour Swatches
+Each colour family has 5 levels: 1 = lightest tint, 3 = primary brand colour, 5 = darkest shade.  
+Tailwind tokens: `bright-navy-1` … `bright-navy-5`, `bright-blue-1` … `bright-green-5`.
 
-![Bright colour swatches](assets/images/bright-colour-swatches.png)
+| Family | Level 1 | Level 2 | **Level 3 (primary)** | Level 4 | Level 5 |
+|--------|---------|---------|----------------------|---------|---------|
+| Navy | `#8CA7B8` | `#3B5C71` | **`#0F2B3D`** | `#081B27` | `#000F1A` |
+| Blue | `#9DDFEE` | `#5BCAE3` | **`#00B0D8`** | `#007995` | `#004858` |
+| Orange | `#FFD39F` | `#F4B56A` | **`#E39400`** | `#C65300` | `#973600` |
+| Yellow | `#FFEDAE` | `#FFE176` | **`#E6D600`** | `#D1A300` | `#9E6901` |
+| Purple | `#CFBBF6` | `#9F80DE` | **`#6F42C1`** | `#381774` | `#1B004E` |
+| Pink | `#FFA7CD` | `#E85795` | **`#DB015F`** | `#9C0043` | `#510023` |
+| Cyan | `#A6E3D6` | `#76D6C1` | **`#2FBF9F`** | `#008D6E` | `#005542` |
+| Red | `#FFADAD` | `#FF7485` | **`#F2103D`** | `#B2000B` | `#740007` |
+| Green | `#A5F5CA` | `#3EDF88` | **`#00893F`** | `#005C2A` | `#00391C` |
+
+### Surface / Neutral colours (Cool Grey palette)
+
+Used for backgrounds, text, borders, dividers, shadows, and component surfaces (cards, tables, empty states).  
+Tailwind tokens: standard `gray-50` … `gray-900`. These map 1:1 to Bright's Cool Grey 01–11.
+
+| Name | Hex | Tailwind | Typical use |
+|------|-----|----------|-------------|
+| Cool Grey 01 | `#F9FAFB` | `gray-50` | Page background |
+| Cool Grey 02 | `#F3F4F6` | `gray-100` | Card/panel backgrounds |
+| Cool Grey 03 | `#E5E7EB` | `gray-200` | Borders, dividers |
+| Cool Grey 04 | `#D1D5DB` | `gray-300` | Disabled borders |
+| Cool Grey 05 | `#9CA3AF` | `gray-400` | Placeholder text |
+| Cool Grey 06 | `#6B7280` | `gray-500` | Muted/secondary text |
+| Cool Grey 07 | `#4B5563` | `gray-600` | Secondary text |
+| Cool Grey 08 | `#374151` | `gray-700` | Strong secondary text |
+| Cool Grey 09 | `#1F2937` | `gray-800` | Near-dark text |
+| Cool Grey 10 | `#111827` | `gray-900` | Near-black text |
+| Cool Grey 11 | `#080E1B` | — | Deepest dark (custom) |
 
 ---
 
@@ -178,23 +210,41 @@ CSS: `linear-gradient(90deg, #0F2B3D 0%, #009FC7 40%, #E39400 75%, #E6D600 100%)
 
 ### Font Stack
 
-- **Primary:** Clean, modern sans-serif (as used on brightsg.com)
-- **Document fallback:** Arial, Calibri
-- **Code/mono:** Monospace fallback
+| Role | Font | Weights |
+|------|------|---------|
+| **Display / Headings** | Museo Sans | 500 (Medium), 700 (Bold), 900 (Black) |
+| **UI / Body** | Open Sans | 400 (Regular), 600 (SemiBold), 700 (Bold) |
+| **Code / Mono** | JetBrains Mono | 400, 500 |
 
-### Scale
+**Museo Sans** is the Bright brand typeface — headings and display text.  
+**Open Sans** is the UI typeface — all body copy, labels, and UI elements.
 
-| Style | Size | Weight | Colour | Notes |
-|-------|------|--------|--------|-------|
-| Heading 1 | 28–32px | 700 | Navy or Blue | Page/section titles |
-| Heading 2 | 22–24px | 700 | Navy or Blue | Sub-section titles |
-| Heading 3 | 18–20px | 600 | Navy | Section headings |
-| Body | 15–16px | 400 | Navy | Line height 1.7 |
-| Caption / Label | 11–13px | 400 | Muted grey | Supporting text |
+> Museo Sans is a licensed font (available via Adobe Fonts). Open Sans is available free via Google Fonts.  
+> If Museo Sans is unavailable, use Nunito as a close fallback (both are rounded geometric sans-serifs).
 
-- **Headings:** Bold, Navy or Blue — never use off-brand colours for headings
-- **Body text:** Navy on white or light backgrounds
-- **Two weights only** in most contexts: regular (400) and bold (500–700)
+### Type Scale
+
+Default body size is **16px** — maximises legibility and meets accessibility best practice.
+
+| Name | Font | Size | Line-height | Para spacing |
+|------|------|------|-------------|--------------|
+| XX-Large | Museo Sans | 44px | 52px | 28px |
+| X-Large | Museo Sans | 36px | 44px | 24px |
+| Large | Museo Sans | 24px | 32px | 20px |
+| Medium | Museo Sans | 20px | 28px | 20px |
+| **Small** *(default)* | Open Sans | **16px** | **24px** | 16px |
+| X-Small | Open Sans | 14px | 20px | 14px |
+| XX-Small | Open Sans | 12px | 16px | 12px |
+
+> **X-Small (14px)** does not conform to the 4px baseline grid and does not meet accessibility best practice — use only when absolutely necessary, never for paragraph text.
+
+### Rules
+
+- **Default alignment: left** — centre-align only for short isolated labels (button text, empty state headings), never for paragraphs
+- **Default case: sentence case** — never all-caps (exception: acronyms such as HMRC, RTI, MTD)
+- **Character measure: 45–75 characters per line** — optimal range. Adjust line-height up for wider columns, down for narrow
+- **Heading colour:** Navy or Blue only — never off-brand colours
+- **Body text colour:** Navy on light backgrounds; White on dark backgrounds
 
 ![Bright typography specimen](assets/images/bright-typography.png)
 

@@ -90,7 +90,7 @@ export default function Run({ onRunComplete }) {
 
   return (
     <div className="p-8 max-w-4xl">
-      <h1 className="text-xl font-semibold text-brand-navy mb-1">Run</h1>
+      <h1 className="text-2xl font-bold text-brand-navy font-heading mb-1">Run</h1>
       <p className="text-sm text-gray-500 mb-8">Trigger an analysis run and watch live results.</p>
 
       {/* Controls */}
@@ -190,11 +190,11 @@ export default function Run({ onRunComplete }) {
 
       {/* Error banner */}
       {runError && (
-        <div className="bg-brand-orange/10 border border-brand-orange/20 rounded-lg p-4 mb-6 flex items-start gap-3">
-          <span className="text-brand-orange text-lg shrink-0">✕</span>
+        <div className="bg-bright-red-1 border border-bright-red-2/40 rounded-lg p-4 mb-6 flex items-start gap-3">
+          <span className="text-bright-red-3 text-lg shrink-0">✕</span>
           <div>
             <div className="font-medium text-brand-navy text-sm">Run failed</div>
-            <div className="text-brand-orange text-xs mt-0.5">{runError}</div>
+            <div className="text-bright-red-3 text-xs mt-0.5">{runError}</div>
           </div>
         </div>
       )}
@@ -202,7 +202,7 @@ export default function Run({ onRunComplete }) {
       {/* Live feed */}
       {events.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Live Feed</h2>
+          <h2 className="text-xs font-semibold text-gray-500 mb-3">Live feed</h2>
           <LiveFeed events={progressEvents} benchmarkBrand={config?.benchmark_brand || 'Bright'} />
           {running && phaseMessage && (
             <div className="mt-2 px-4 py-2 bg-brand-blue/10 border border-brand-blue/20 rounded text-xs text-brand-blue font-mono animate-pulse">
@@ -214,7 +214,7 @@ export default function Run({ onRunComplete }) {
 
       {/* Run history */}
       <div>
-        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Run History</h2>
+        <h2 className="text-xs font-semibold text-gray-500 mb-3">Run history</h2>
         <RunHistory runs={runs} activeRunId={runId} />
       </div>
     </div>

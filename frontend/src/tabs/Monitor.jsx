@@ -171,7 +171,7 @@ export default function Monitor() {
 
   return (
     <div className="p-8 max-w-5xl">
-      <h1 className="text-xl font-semibold text-brand-navy mb-1">Monitor</h1>
+      <h1 className="text-2xl font-bold text-brand-navy font-heading mb-1">Monitor</h1>
       <p className="text-sm text-gray-500 mb-6">
         Live backend log stream — errors, warnings, and audit events.
         Buffer holds the last 500 events.
@@ -300,7 +300,7 @@ function SummaryCard({ label, count, dot, highlight, alertStyle }) {
         <span className={`w-2 h-2 rounded-full ${dot}`} />
         <span className="text-xs font-medium text-gray-500">{label}</span>
       </div>
-      <div className={`font-mono text-2xl font-medium ${
+      <div className={`font-heading font-bold text-2xl ${
         alertStyle && count > 0 ? 'text-red-600' :
         highlight ? 'text-brand-blue' : 'text-brand-navy'
       }`}>

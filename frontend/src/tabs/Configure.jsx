@@ -28,7 +28,7 @@ export default function Configure() {
 
   return (
     <div className="p-8 max-w-5xl">
-      <h1 className="text-xl font-semibold text-brand-navy mb-1">Configure</h1>
+      <h1 className="text-2xl font-bold text-brand-navy font-heading mb-1">Configure</h1>
       <p className="text-sm text-gray-500 mb-8">
         Manage prompts, competitors, models, and brand assets.
       </p>
@@ -36,7 +36,7 @@ export default function Configure() {
       {/* Per-topic sections: prompts + peer set together */}
       <section className="mb-10">
         <div className="flex items-center gap-2 mb-1">
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Topics</h2>
+          <h2 className="text-xs font-semibold text-gray-500">Topics</h2>
           <span className="font-mono text-xs text-gray-400">{topics.length}</span>
         </div>
         <p className="text-xs text-gray-400 mb-5">
@@ -54,8 +54,7 @@ export default function Configure() {
               <div key={topic} className="border border-gray-200 rounded-lg overflow-hidden">
                 {/* Topic header — click to expand/collapse */}
                 <button
-                  className="w-full flex items-center justify-between px-5 py-3 text-left transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: '#265AB2' }}
+                  className="w-full flex items-center justify-between px-5 py-3 text-left transition-opacity hover:opacity-90 bg-brand-navy"
                   onClick={() => toggleTopic(topic)}
                 >
                   <div className="flex items-center gap-3 min-w-0">
@@ -74,7 +73,7 @@ export default function Configure() {
                   <div className="p-5 grid grid-cols-2 gap-6">
                     {/* Prompts for this topic */}
                     <div>
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Prompts</div>
+                      <div className="text-xs font-semibold text-gray-500 mb-3">Prompts</div>
                       <PromptTable
                         prompts={promptsForTopic}
                         allPrompts={config.prompts}
@@ -84,7 +83,7 @@ export default function Configure() {
 
                     {/* Peer set for this topic */}
                     <div>
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Competitor Peer Set</div>
+                      <div className="text-xs font-semibold text-gray-500 mb-3">Competitor peer set</div>
                       <CompetitorTable
                         title={topic}
                         peerSetKey={key}
@@ -140,7 +139,7 @@ export default function Configure() {
 
         {/* Core assets — always loaded */}
         <div className="mb-6">
-          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Core — loaded for every topic</div>
+          <div className="text-xs font-semibold text-gray-500 mb-3">Core — loaded for every topic</div>
           <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
             {[
               { file: 'tone-of-voice.md',               label: 'Tone of Voice' },
@@ -156,7 +155,7 @@ export default function Configure() {
 
         {/* Topic assets — one per topic, loaded alongside core assets */}
         <div>
-          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Topic — loaded per topic</div>
+          <div className="text-xs font-semibold text-gray-500 mb-3">Topic — loaded per topic</div>
           {topics.length === 0 ? (
             <div className="text-sm text-gray-400">No topics yet — add a prompt above to create one.</div>
           ) : (
@@ -249,7 +248,7 @@ function Section({ title, children }) {
   return (
     <section className="mb-10">
       <div className="flex items-center gap-2 mb-4">
-        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{title}</h2>
+        <h2 className="text-xs font-semibold text-gray-500">{title}</h2>
       </div>
       {children}
     </section>
