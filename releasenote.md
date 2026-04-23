@@ -4,6 +4,37 @@ Bright AEO Engine is an internal tool for Bright Software Group that measures an
 
 ---
 
+## v1.4.0 — 2026-04-23
+
+Azure App Service deployment support.
+
+### Added
+
+- **`startup.sh`** — App Service startup script. Creates `/home/data/results/` and `/home/data/config.json` on first run, installs Python dependencies, and starts uvicorn with a single worker (required for in-memory SSE queues).
+- **`.github/workflows/deploy.yml`** — GitHub Actions workflow. Builds the React frontend then deploys the full package to Azure App Service on every push to `main`. Also triggerable manually via `workflow_dispatch`.
+- **`DEPLOY.md`** — Step-by-step Azure deployment guide covering App Service creation, app settings, startup command, Easy Auth (Microsoft login for Bright staff), GitHub secrets, and troubleshooting.
+- **`backend/main.py`** — Production static file serving. When `frontend/dist/` exists, FastAPI mounts Vite's hashed assets at `/assets` and serves `index.html` for all unmatched routes (SPA catch-all). Falls back to Vite dev server proxy in local development (dist not present).
+
+### Changed
+
+- **`backend/deps.py`** — `CONFIG_PATH` and `RESULTS_DIR` now read from `CONFIG_PATH` and `RESULTS_DIR` environment variables, falling back to the existing local paths. Allows Azure deployment to point both at `/home/data/` (persistent Azure Files storage) so config and run results survive new deployments.
+- **`backend/requirements.txt`** — Added `aiofiles` (required by FastAPI's `StaticFiles` for async file serving).
+
+### How to upgrade (Azure)
+
+Set two new App Service environment variables before deploying:
+
+| Variable | Value |
+|---|---|
+| `CONFIG_PATH` | `/home/data/config.json` |
+| `RESULTS_DIR` | `/home/data/results` |
+
+Set the App Service startup command to `bash /home/site/wwwroot/startup.sh`.
+
+No `config.json` schema changes. Local development workflow is unchanged.
+
+---
+
 ## v1.3.0 — 2026-04-17
 
 Production readiness: repositories, services, controllers, and agent protocol.

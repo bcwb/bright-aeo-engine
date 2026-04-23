@@ -35,7 +35,7 @@ if not os.environ.get("PERPLEXITY_API_KEY"):
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from core.logging import get_logger, setup_logging
 from errors.exceptions import AEOError
@@ -80,3 +80,23 @@ app.include_router(run_router)
 app.include_router(content_router)
 app.include_router(log_router)
 app.include_router(asset_router)
+
+# ── Frontend static files (production) ────────────────────────────────────
+# When frontend/dist exists (i.e. after `npm run build`), FastAPI serves the
+# React SPA directly.  In local dev, Vite's dev server handles the frontend
+# and proxies API calls to this backend, so the dist folder won't exist.
+_FRONTEND_DIST = ROOT / "frontend" / "dist"
+
+if _FRONTEND_DIST.exists():
+    from fastapi.staticfiles import StaticFiles
+
+    # Serve Vite's hashed JS/CSS assets.  Routers are registered above, so
+    # the POST /assets/open endpoint is found before this mount for POST requests.
+    if (_FRONTEND_DIST / "assets").exists():
+        app.mount("/assets", StaticFiles(directory=_FRONTEND_DIST / "assets"), name="vite-assets")
+
+    # Catch-all: return index.html for any path not matched by the API routers
+    # above, which lets React Router handle client-side navigation.
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_spa(full_path: str):
+        return FileResponse(_FRONTEND_DIST / "index.html")

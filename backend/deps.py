@@ -4,6 +4,7 @@ Application-level singletons — repositories and services.
 Import from here in controllers and main.py to share instances.
 """
 
+import os
 from pathlib import Path
 
 from repositories.config_repository import ConfigRepository
@@ -13,9 +14,13 @@ from services.content_service import ContentService
 from services.run_service import RunService
 
 # ── Paths ──────────────────────────────────────────────────────────────────
-CONFIG_PATH = Path(__file__).parent / "config.json"
-RESULTS_DIR = Path(__file__).parent / "results"
-ASSETS_DIR  = Path(__file__).parent / "assets"
+# CONFIG_PATH and RESULTS_DIR can be overridden via env vars so that on
+# Azure App Service they point to /home/data/ (persistent storage) rather
+# than the deployment package directory which is overwritten on each deploy.
+_backend = Path(__file__).parent
+CONFIG_PATH = Path(os.environ.get("CONFIG_PATH", _backend / "config.json"))
+RESULTS_DIR = Path(os.environ.get("RESULTS_DIR", _backend / "results"))
+ASSETS_DIR  = _backend / "assets"
 
 # ── Repositories ───────────────────────────────────────────────────────────
 config_repo  = ConfigRepository(CONFIG_PATH, ASSETS_DIR)
