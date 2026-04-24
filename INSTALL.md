@@ -8,7 +8,7 @@ This document records the live deployment. Update it whenever infrastructure cha
 
 | | |
 |---|---|
-| **URL** | https://bright-aeo.azurewebsites.net |
+| **URL** | https://bright-aeo-d7b9enc0ejc3ftbq.westeurope-01.azurewebsites.net |
 | **App Service name** | Bright-AEO |
 | **Subscription** | Bright Internal |
 | **Resource Group** | Marketing |
@@ -71,7 +71,7 @@ This document records the live deployment. Update it whenever infrastructure cha
 - [x] Download publish profile and add `AZURE_WEBAPP_PUBLISH_PROFILE` secret to GitHub
 - [x] Add `AZURE_WEBAPP_NAME` variable to GitHub repo
 - [x] Trigger first deployment via GitHub Actions
-- [ ] Verify app loads at https://bright-aeo.azurewebsites.net
+- [ ] Verify app loads at https://bright-aeo-d7b9enc0ejc3ftbq.westeurope-01.azurewebsites.net
 - [ ] Add remaining API keys (`OPENAI_API_KEY`, `GOOGLE_API_KEY`, `PERPLEXITY_API_KEY`) when available
 
 ---
