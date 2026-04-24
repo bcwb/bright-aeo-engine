@@ -7,7 +7,7 @@ Flag when any section needs updating based on new decisions made.
 
 ## Standing agents
 
-Three agents are always active on this project. Run all three at the end of every session where changes were made.
+Four agents are always active on this project. Run all four at the end of every session where changes were made.
 
 ---
 
@@ -37,6 +37,35 @@ Rules:
 - Keep the same 12-section structure. Add a new section only if a genuinely new capability has no existing home.
 - Reflect the current state of the software — the guide must be accurate for someone starting fresh today.
 - If a troubleshooting entry in section 11 is no longer relevant (the bug was fixed), remove it.
+
+---
+
+### Deployment State Agent
+
+**Files:** `INSTALL.md` and `DEPLOY.md` (project root)
+
+At the end of every session where deployment infrastructure, configuration, or environment changed, update both files to reflect the current state.
+
+**Update `INSTALL.md` when:**
+- A new Azure resource is provisioned (update the Live deployment table)
+- An App Setting is added, changed, or removed (update the App Settings table)
+- GitHub Actions secrets or variables are configured (update the GitHub Actions table)
+- Easy Auth is enabled or changed (update the Access control table)
+- The startup command is set (update the Startup command table)
+- A deployment succeeds — update **Deployed version** to the new version number
+- A pending action is completed — tick it off the checklist or remove it
+- A new pending action is identified — add it to the checklist
+
+**Update `DEPLOY.md` when:**
+- The deployment process itself changes (new steps, changed settings, new troubleshooting entries)
+- A known issue is discovered or resolved
+- Quota or region guidance changes based on experience
+
+**Rules:**
+- `INSTALL.md` is a snapshot of current reality — it must always be accurate for someone checking the deployment state right now
+- Never leave a completed action in the pending checklist
+- If the deployed version is unknown, write `unknown — check GitHub Actions`
+- Use ✅ for confirmed, ⏳ for pending, ❌ for failed/blocked
 
 ---
 
