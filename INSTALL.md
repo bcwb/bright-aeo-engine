@@ -15,7 +15,7 @@ This document records the live deployment. Update it whenever infrastructure cha
 | **Region** | West Europe |
 | **Runtime** | Python 3.11 |
 | **Plan** | B1 Basic |
-| **Deployed version** | v1.4.1 (pending first deployment) |
+| **Deployed version** | v1.4.1 |
 
 ---
 
@@ -40,9 +40,9 @@ This document records the live deployment. Update it whenever infrastructure cha
 |---|---|
 | **Workflow** | `.github/workflows/deploy.yml` |
 | **Trigger** | Push to `main` + manual `workflow_dispatch` |
-| **`AZURE_WEBAPP_NAME` variable** | ⏳ Pending — add to GitHub repo variables |
-| **`AZURE_WEBAPP_PUBLISH_PROFILE` secret** | ⏳ Pending — download from Azure and add to GitHub secrets |
-| **Status** | Not yet wired up |
+| **`AZURE_WEBAPP_NAME` variable** | ✅ Set | `Bright-AEO` |
+| **`AZURE_WEBAPP_PUBLISH_PROFILE` secret** | ✅ Set | |
+| **Status** | ✅ Active — deploys on every push to `main` |
 
 ---
 
@@ -50,8 +50,8 @@ This document records the live deployment. Update it whenever infrastructure cha
 
 | | |
 |---|---|
-| **Easy Auth** | ⏳ Pending — Microsoft identity provider not yet configured |
-| **Access** | Currently open (no auth) |
+| **Easy Auth** | ⏳ Pending — requires Azure AD admin to create app registration |
+| **Access** | Currently open (no auth) — IT ticket raised |
 
 ---
 
@@ -60,17 +60,17 @@ This document records the live deployment. Update it whenever infrastructure cha
 | | |
 |---|---|
 | **Command** | `bash /home/site/wwwroot/startup.sh` |
-| **Status** | ⏳ Pending — not yet set in App Service configuration |
+| **Status** | ✅ Set |
 
 ---
 
 ## Known pending actions
 
-- [ ] Set startup command in App Service → Configuration → General settings
-- [ ] Configure Easy Auth (Microsoft identity provider)
-- [ ] Download publish profile from Azure and add `AZURE_WEBAPP_PUBLISH_PROFILE` secret to GitHub
-- [ ] Add `AZURE_WEBAPP_NAME` variable to GitHub repo
-- [ ] Trigger first deployment via GitHub Actions
+- [x] Set startup command in App Service → Configuration → General settings
+- [ ] Configure Easy Auth — awaiting IT to grant Azure AD app registration permissions
+- [x] Download publish profile and add `AZURE_WEBAPP_PUBLISH_PROFILE` secret to GitHub
+- [x] Add `AZURE_WEBAPP_NAME` variable to GitHub repo
+- [x] Trigger first deployment via GitHub Actions
 - [ ] Verify app loads at https://bright-aeo.azurewebsites.net
 - [ ] Add remaining API keys (`OPENAI_API_KEY`, `GOOGLE_API_KEY`, `PERPLEXITY_API_KEY`) when available
 
