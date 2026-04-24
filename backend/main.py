@@ -23,15 +23,24 @@ from dotenv import load_dotenv
 load_dotenv(ROOT / ".env")
 
 # ── API key validation ─────────────────────────────────────────────────────
-_REQUIRED_KEYS = ["ANTHROPIC_API_KEY", "OPENAI_API_KEY", "GOOGLE_API_KEY"]
-_missing = [k for k in _REQUIRED_KEYS if not os.environ.get(k)]
-if _missing:
+# All keys are optional at startup — models without a key are simply skipped.
+# At least one key must be present or there is nothing to run.
+_ALL_KEYS = {
+    "ANTHROPIC_API_KEY": "Claude",
+    "OPENAI_API_KEY":    "GPT-4o",
+    "GOOGLE_API_KEY":    "Gemini",
+    "PERPLEXITY_API_KEY":"Perplexity",
+}
+_present = [label for key, label in _ALL_KEYS.items() if os.environ.get(key)]
+_missing = [label for key, label in _ALL_KEYS.items() if not os.environ.get(key)]
+
+if not _present:
     raise RuntimeError(
-        f"\n\nMissing required API keys: {', '.join(_missing)}\n"
+        "\n\nNo API keys are set — at least one is required.\n"
         f"Edit {ROOT / '.env'} and restart.\n"
     )
-if not os.environ.get("PERPLEXITY_API_KEY"):
-    print("INFO: PERPLEXITY_API_KEY not set — Perplexity queries will be skipped.")
+if _missing:
+    print(f"INFO: No key set for {', '.join(_missing)} — those models will be skipped.")
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware

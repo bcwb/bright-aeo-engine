@@ -4,6 +4,14 @@ Bright AEO Engine is an internal tool for Bright Software Group that measures an
 
 ---
 
+## v1.4.1 — 2026-04-24
+
+### Changed
+
+- **`backend/main.py`** — All API keys are now optional at startup. Models whose key is not set are skipped with an INFO log rather than crashing the app. The app only refuses to start if *no* keys at all are present. This allows partial deployments (e.g. Anthropic-only) while keys for other models are being provisioned.
+
+---
+
 ## v1.4.0 — 2026-04-23
 
 Azure App Service deployment support.
