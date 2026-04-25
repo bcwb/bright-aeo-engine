@@ -39,7 +39,9 @@ from repositories.results_repository import ResultsRepository
 
 logger = get_logger(__name__)
 
-_results_repo = ResultsRepository(Path(__file__).parent.parent / "results")
+_results_repo = ResultsRepository(
+    Path(os.environ.get("RESULTS_DIR") or str(Path(__file__).parent.parent / "results"))
+)
 
 ABORT_THRESHOLD = 0.30          # abort if >30% of calls fail
 MAX_CONCURRENT_PER_MODEL = 3
