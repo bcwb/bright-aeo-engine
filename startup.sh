@@ -17,6 +17,13 @@ if [ ! -f /home/data/config.json ]; then
     echo "Initialised /home/data/config.json from deployment package"
 fi
 
+# Copy the bundled assets to persistent storage on first deploy only.
+# Subsequent deployments preserve any edits users made via the UI.
+if [ ! -d /home/data/assets ]; then
+    cp -r /home/site/wwwroot/backend/assets /home/data/assets
+    echo "Initialised /home/data/assets from deployment package"
+fi
+
 # ── Python dependencies ───────────────────────────────────────────────────
 pip install --quiet -r /home/site/wwwroot/backend/requirements.txt
 

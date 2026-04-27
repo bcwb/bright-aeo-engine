@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getConfig, deletePeerSet, openAsset, updateBenchmarkBrand } from '../api'
+import { getConfig, deletePeerSet, getAssetContent, saveAssetContent, updateBenchmarkBrand } from '../api'
 import PromptTable from '../components/PromptTable'
 import CompetitorTable from '../components/CompetitorTable'
 import ModelConfig from '../components/ModelConfig'
@@ -134,7 +134,7 @@ export default function Configure() {
         <p className="text-xs text-gray-400 mb-5">
           Core assets are loaded for every content generation request.
           Topic assets are loaded only when generating content for that topic.
-          Click <strong className="text-gray-500">Open</strong> to edit in your default editor.
+          Click <strong className="text-gray-500">Edit</strong> to view and update an asset's content.
         </p>
 
         {/* Core assets — always loaded */}
@@ -256,37 +256,104 @@ function Section({ title, children }) {
 }
 
 function AssetRow({ file, label }) {
-  const [status, setStatus] = useState(null)  // null | 'opening' | 'ok' | 'err'
+  const [open, setOpen]       = useState(false)
+  const [content, setContent] = useState('')
+  const [draft, setDraft]     = useState('')
+  const [loading, setLoading] = useState(false)
+  const [saving, setSaving]   = useState(false)
+  const [error, setError]     = useState(null)
+  const [saved, setSaved]     = useState(false)
 
-  async function handleOpen() {
-    setStatus('opening')
+  async function handleEdit() {
+    setOpen(true)
+    setLoading(true)
+    setError(null)
     try {
-      await openAsset(file)
-      setStatus('ok')
-      setTimeout(() => setStatus(null), 2000)
-    } catch {
-      setStatus('err')
-      setTimeout(() => setStatus(null), 3000)
+      const res = await getAssetContent(file)
+      setContent(res.content)
+      setDraft(res.content)
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function handleCancel() {
+    setOpen(false)
+    setDraft(content)
+    setError(null)
+    setSaved(false)
+  }
+
+  async function handleSave() {
+    setSaving(true)
+    setError(null)
+    try {
+      await saveAssetContent(file, draft)
+      setContent(draft)
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setSaving(false)
     }
   }
 
   return (
-    <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 last:border-0 gap-3">
-      <span className="text-sm text-gray-700 min-w-0">{label}</span>
-      <div className="flex items-center gap-3 shrink-0">
-        <span className="font-mono text-xs text-gray-400 hidden sm:block">backend/assets/{file}</span>
-        <button
-          onClick={handleOpen}
-          disabled={status === 'opening'}
-          className={`text-xs font-medium px-2.5 py-1 rounded border transition-colors ${
-            status === 'ok'  ? 'border-brand-blue/30 text-brand-blue bg-brand-blue/10' :
-            status === 'err' ? 'border-brand-orange/30 text-brand-orange bg-brand-orange/10' :
-            'border-gray-200 text-brand-blue hover:border-brand-blue/50 hover:bg-brand-blue/10'
-          }`}
-        >
-          {status === 'opening' ? '…' : status === 'ok' ? 'Opened ✓' : status === 'err' ? 'Not found' : 'Open'}
-        </button>
+    <div className="border-b border-gray-100 last:border-0">
+      <div className="flex items-center justify-between px-4 py-2.5 gap-3">
+        <span className="text-sm text-gray-700 min-w-0">{label}</span>
+        <div className="flex items-center gap-3 shrink-0">
+          <span className="font-mono text-xs text-gray-400 hidden sm:block">assets/{file}</span>
+          <button
+            onClick={open ? handleCancel : handleEdit}
+            className="text-xs font-medium px-2.5 py-1 rounded border border-gray-200 text-brand-blue hover:border-brand-blue/50 hover:bg-brand-blue/10 transition-colors"
+          >
+            {open ? 'Close' : 'Edit'}
+          </button>
+        </div>
       </div>
+
+      {open && (
+        <div className="px-4 pb-4">
+          {loading ? (
+            <div className="text-xs text-gray-400 py-2">Loading…</div>
+          ) : (
+            <>
+              <textarea
+                value={draft}
+                onChange={e => setDraft(e.target.value)}
+                rows={16}
+                className="w-full font-mono text-xs border border-gray-200 rounded p-3 focus:outline-none focus:border-brand-blue/50 resize-y"
+                style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+              />
+              {error && (
+                <div className="mt-2 text-xs text-brand-orange">{error}</div>
+              )}
+              <div className="flex items-center gap-3 mt-2">
+                <button
+                  onClick={handleSave}
+                  disabled={saving || draft === content}
+                  className="text-xs font-semibold px-3 py-1.5 rounded bg-brand-blue text-white hover:bg-brand-blue/90 disabled:opacity-50 transition-colors"
+                >
+                  {saving ? 'Saving…' : saved ? 'Saved ✓' : 'Save'}
+                </button>
+                <button
+                  onClick={handleCancel}
+                  className="text-xs text-gray-400 hover:text-gray-600"
+                >
+                  Cancel
+                </button>
+                {draft !== content && !saving && (
+                  <span className="text-xs text-gray-400 ml-auto">Unsaved changes</span>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   )
 }

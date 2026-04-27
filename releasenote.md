@@ -4,6 +4,25 @@ Bright AEO Engine is an internal tool for Bright Software Group that measures an
 
 ---
 
+## v1.5.0 — 2026-04-23
+
+### Added
+
+- **`backend/controllers/asset_controller.py`** — New web-based asset editing API. `GET /assets/content?file=<path>` returns the text content of any asset file. `PUT /assets/content` writes updated content back. Both endpoints enforce path-traversal protection (files must resolve within `ASSETS_DIR`). Replaces the previous macOS-only `POST /assets/open` endpoint.
+- **`startup.sh`** — On first deploy, copies `backend/assets/` to `/home/data/assets/` so the persistent asset store is seeded. Subsequent deploys leave `/home/data/assets/` untouched.
+- **`backend/deps.py`** — `ASSETS_DIR` now reads from an `ASSETS_DIR` environment variable, falling back to `backend/assets/`. Set `ASSETS_DIR=/home/data/assets` in App Service to point at persistent storage.
+
+### Changed
+
+- **`frontend/src/api.js`** — Replaced `openAsset` with `getAssetContent(file)` and `saveAssetContent(file, content)`.
+- **`frontend/src/tabs/Configure.jsx`** — `AssetRow` component rewritten. Each asset row now has an **Edit** button that loads the file content into an inline textarea. Users can edit and save directly in the browser — no local file access required.
+
+### Upgrade steps
+
+Add `ASSETS_DIR=/home/data/assets` to App Service → Settings → Environment variables and restart the app. On first restart after this deploy, `startup.sh` will copy the bundled assets to `/home/data/assets/` if that directory does not yet exist.
+
+---
+
 ## v1.4.1 — 2026-04-24
 
 ### Changed

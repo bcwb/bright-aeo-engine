@@ -20,7 +20,7 @@ from services.run_service import RunService
 _backend = Path(__file__).parent
 CONFIG_PATH = Path(os.environ.get("CONFIG_PATH", _backend / "config.json"))
 RESULTS_DIR = Path(os.environ.get("RESULTS_DIR", _backend / "results"))
-ASSETS_DIR  = _backend / "assets"
+ASSETS_DIR  = Path(os.environ.get("ASSETS_DIR",  _backend / "assets"))
 
 # ── Repositories ───────────────────────────────────────────────────────────
 config_repo  = ConfigRepository(CONFIG_PATH, ASSETS_DIR)

@@ -132,9 +132,12 @@ export const clearLogs = () =>
 
 // ── Assets ────────────────────────────────────────────────────────────────
 
-export const openAsset = (file) =>
-  fetch(`${BASE}/assets/open`, {
-    method: 'POST',
+export const getAssetContent = (file) =>
+  fetch(`${BASE}/assets/content?file=${encodeURIComponent(file)}`).then(json)
+
+export const saveAssetContent = (file, content) =>
+  fetch(`${BASE}/assets/content`, {
+    method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ file }),
+    body: JSON.stringify({ file, content }),
   }).then(json)

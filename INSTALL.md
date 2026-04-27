@@ -15,7 +15,7 @@ This document records the live deployment. Update it whenever infrastructure cha
 | **Region** | West Europe |
 | **Runtime** | Python 3.11 |
 | **Plan** | B1 Basic |
-| **Deployed version** | v1.4.1 |
+| **Deployed version** | v1.5.0 |
 
 ---
 
@@ -29,6 +29,7 @@ This document records the live deployment. Update it whenever infrastructure cha
 | `PERPLEXITY_API_KEY` | ⏳ Pending | Add when key is available |
 | `CONFIG_PATH` | ✅ Set | `/home/data/config.json` |
 | `RESULTS_DIR` | ✅ Set | `/home/data/results` |
+| `ASSETS_DIR` | ⏳ Pending | Set to `/home/data/assets` — required for inline asset editor |
 | `SCM_DO_BUILD_DURING_DEPLOYMENT` | ✅ Set | `false` |
 | `WEBSITES_PORT` | ✅ Set | `8000` |
 
@@ -72,6 +73,7 @@ This document records the live deployment. Update it whenever infrastructure cha
 - [x] Add `AZURE_WEBAPP_NAME` variable to GitHub repo
 - [x] Trigger first deployment via GitHub Actions
 - [x] Verify app loads at https://bright-aeo-d7b9enc0ejc3ftbq.westeurope-01.azurewebsites.net
+- [ ] Add `ASSETS_DIR=/home/data/assets` environment variable and restart app
 - [ ] Add remaining API keys (`OPENAI_API_KEY`, `GOOGLE_API_KEY`, `PERPLEXITY_API_KEY`) when available
 
 ---
