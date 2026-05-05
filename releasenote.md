@@ -4,6 +4,22 @@ Bright AEO Engine is an internal tool for Bright Software Group that measures an
 
 ---
 
+## v1.6.0 — 2026-05-05
+
+### Added
+
+- **`backend/auth.py`** — `CurrentUser` dataclass and `get_current_user` FastAPI dependency. Decodes the `X-MS-CLIENT-PRINCIPAL` header injected by Azure App Service Easy Auth (Entra ID). Falls back to `DEV_USER` environment variable for local development. Returns HTTP 401 if neither is present. Handles both short and long-form Azure AD claim URIs.
+- **`GET /me`** — New endpoint returning the resolved identity `{name, email, oid, source}` of the calling user. Used by the frontend on boot.
+- **`frontend/src/api.js`** — `getMe()` function calling `GET /me`.
+- **`frontend/src/App.jsx`** — Sidebar footer now shows the current user's name and email, resolved on app load via `GET /me`. Shows "dev mode" badge when running with `DEV_USER` fallback. Falls back gracefully to "Bright Software Group" if the endpoint is unavailable.
+- **`frontend/vite.config.js`** — Added `/me` to the Vite dev server proxy.
+
+### Upgrade steps
+
+For local development, add `DEV_USER=Your Name <your.email@brightsg.com>` (or just `DEV_USER=your.email@brightsg.com`) to `.env`. Without this, `GET /me` returns 401 and the sidebar shows the static fallback text. On Azure, Easy Auth must be enabled for the header to be present; until then, set `DEV_USER=ben.bishop@brightsg.com` as a temporary App Service environment variable.
+
+---
+
 ## v1.5.0 — 2026-04-23
 
 ### Added

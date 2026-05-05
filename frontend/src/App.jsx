@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Configure from './tabs/Configure'
 import Run from './tabs/Run'
 import Insights from './tabs/Insights'
 import Monitor from './tabs/Monitor'
+import { getMe } from './api'
 
 const TABS = [
   { id: 'configure', label: 'Configure' },
@@ -31,8 +32,11 @@ function BrightLogo() {
 }
 
 export default function App() {
-  const [activeTab, setActiveTab]       = useState('run')
+  const [activeTab, setActiveTab]         = useState('run')
   const [selectedRunId, setSelectedRunId] = useState(null)
+  const [currentUser, setCurrentUser]     = useState(null)
+
+  useEffect(() => { getMe().then(setCurrentUser) }, [])
 
   function handleRunComplete(runId) {
     setSelectedRunId(runId)
@@ -67,8 +71,20 @@ export default function App() {
         </nav>
 
         <div className="px-4 py-4 border-t border-white/10">
-          <div className="text-white/40 text-xs">Bright Software Group</div>
-          <div className="text-white/30 text-xs mt-0.5">Internal · v1.0</div>
+          {currentUser ? (
+            <>
+              <div className="text-white/80 text-xs font-medium truncate">{currentUser.name}</div>
+              <div className="text-white/40 text-xs truncate mt-0.5">{currentUser.email}</div>
+              {currentUser.source === 'dev_fallback' && (
+                <div className="text-brand-yellow text-xs mt-1">dev mode</div>
+              )}
+            </>
+          ) : (
+            <>
+              <div className="text-white/40 text-xs">Bright Software Group</div>
+              <div className="text-white/30 text-xs mt-0.5">Internal</div>
+            </>
+          )}
         </div>
       </aside>
 

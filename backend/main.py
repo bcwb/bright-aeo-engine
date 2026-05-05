@@ -42,10 +42,11 @@ if not _present:
 if _missing:
     print(f"INFO: No key set for {', '.join(_missing)} — those models will be skipped.")
 
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 
+from auth import CurrentUser, get_current_user
 from core.logging import get_logger, setup_logging
 from errors.exceptions import AEOError
 
@@ -89,6 +90,12 @@ app.include_router(run_router)
 app.include_router(content_router)
 app.include_router(log_router)
 app.include_router(asset_router)
+
+
+@app.get("/me", tags=["auth"])
+async def get_me(user: CurrentUser = Depends(get_current_user)):
+    """Return the resolved identity of the calling user."""
+    return user.to_dict()
 
 # ── Frontend static files (production) ────────────────────────────────────
 # When frontend/dist exists (i.e. after `npm run build`), FastAPI serves the

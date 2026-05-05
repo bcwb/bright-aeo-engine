@@ -130,6 +130,11 @@ export const getLogs = (level = null, limit = 200) => {
 export const clearLogs = () =>
   fetch(`${BASE}/logs`, { method: 'DELETE' })
 
+// ── Auth ──────────────────────────────────────────────────────────────────
+
+export const getMe = () =>
+  fetch(`${BASE}/me`).then(r => r.ok ? r.json() : null)
+
 // ── Assets ────────────────────────────────────────────────────────────────
 
 export const getAssetContent = (file) =>

@@ -13,6 +13,7 @@ export default defineConfig({
       '/targeting': 'http://localhost:8000',
       '/assets':    'http://localhost:8000',
       '/logs':      'http://localhost:8000',
+      '/me':        'http://localhost:8000',
     },
   },
 })
