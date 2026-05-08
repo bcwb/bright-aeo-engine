@@ -70,8 +70,16 @@ export default function Insights({ selectedRunId, onSelectRun }) {
 
   return (
     <div className="p-8 max-w-5xl">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-brand-navy font-heading">Insights</h1>
+      <div className="flex items-start justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-brand-navy font-heading">Insights</h1>
+          {runData?.triggered_by && (
+            <p className="text-xs text-gray-400 mt-1">
+              Triggered by <span className="text-gray-600">{runData.triggered_by.name}</span>
+              {' · '}{runData.run_date}
+            </p>
+          )}
+        </div>
         <select
           value={selectedRunId || ''}
           onChange={e => onSelectRun(e.target.value)}

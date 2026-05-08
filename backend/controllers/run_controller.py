@@ -2,10 +2,11 @@ import asyncio
 import json
 import uuid
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 
 from agents import orchestrator
+from auth import CurrentUser, get_current_user
 from core.logging import get_logger
 from deps import config_repo, results_repo, run_svc
 from errors.exceptions import RunNotFound
@@ -18,11 +19,12 @@ _run_queues: dict[str, asyncio.Queue] = {}
 
 
 @router.post("", status_code=202)
-async def trigger_run(body: dict = {}):
+async def trigger_run(body: dict = {}, user: CurrentUser = Depends(get_current_user)):
     run_id       = str(uuid.uuid4())
     config       = config_repo.load()
     topic_filter = body.get("topic")
     model_filter = body.get("model")
+    triggered_by = user.attribution()
 
     queue: asyncio.Queue = asyncio.Queue()
     _run_queues[run_id] = queue
@@ -34,6 +36,7 @@ async def trigger_run(body: dict = {}):
                 config=config,
                 topic_filter=topic_filter,
                 model_filter=model_filter,
+                triggered_by=triggered_by,
                 progress_callback=queue.put,
             )
         except Exception as e:
@@ -44,6 +47,7 @@ async def trigger_run(body: dict = {}):
         "run_id":       run_id,
         "topic_filter": topic_filter or "all",
         "model_filter": model_filter or "all",
+        "user_email":   user.email,
     }})
 
     active_prompts = [

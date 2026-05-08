@@ -100,6 +100,7 @@ async def run_analysis(
     topic_filter: str | None,
     model_filter: str | None,
     progress_callback,
+    triggered_by: dict | None = None,
 ) -> None:
     """
     Full async analysis pipeline.
@@ -250,6 +251,7 @@ async def run_analysis(
             "status": "aborted",
             "topic_filter": topic_filter,
             "model_filter": model_filter,
+            "triggered_by": triggered_by,
             "config_snapshot": config,
             "query_results": [dataclasses.asdict(r) for r in query_results],
             "analysis": None,
@@ -323,6 +325,7 @@ async def run_analysis(
         "status": "complete",
         "topic_filter": topic_filter,
         "model_filter": model_filter,
+        "triggered_by": triggered_by,
         "config_snapshot": config,
         "query_results": [dataclasses.asdict(r) for r in query_results],
         "analysis": dataclasses.asdict(analysis),

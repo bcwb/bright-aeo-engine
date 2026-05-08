@@ -47,6 +47,7 @@ class RunService:
                 "status":             data.get("status"),
                 "topic_filter":       data.get("topic_filter"),
                 "model_filter":       data.get("model_filter"),
+                "triggered_by":       data.get("triggered_by"),
                 "total_prompts":      analysis.get("total_prompts", 0),
                 "total_responses":    analysis.get("total_responses", 0),
                 "failed_calls":       analysis.get("failed_calls", 0),

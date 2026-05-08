@@ -9,6 +9,7 @@ export default function RunHistory({ runs, activeRunId }) {
         <thead>
           <tr className="border-b border-gray-100 bg-gray-50">
             <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">Run</th>
+            <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500 hidden md:table-cell">By</th>
             <th className="px-4 py-2.5 text-xs font-medium text-gray-500 text-right font-mono">Responses</th>
             <th className="px-4 py-2.5 text-xs font-medium text-gray-500 text-right font-mono">Cost</th>
             <th className="px-4 py-2.5 text-xs font-medium text-gray-500">Status</th>
@@ -21,6 +22,9 @@ export default function RunHistory({ runs, activeRunId }) {
               className={`border-b border-gray-50 ${r.run_id === activeRunId ? 'bg-brand-blue/10' : 'hover:bg-gray-50'}`}
             >
               <td className="px-4 py-2.5 text-gray-700 text-xs">{r.run_name}</td>
+              <td className="px-4 py-2.5 text-xs text-gray-400 hidden md:table-cell">
+                {r.triggered_by?.name || '—'}
+              </td>
               <td className="px-4 py-2.5 text-right font-mono text-xs text-gray-600">
                 {r.total_responses}
                 {r.failed_calls > 0 && (

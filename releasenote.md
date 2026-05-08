@@ -4,6 +4,22 @@ Bright AEO Engine is an internal tool for Bright Software Group that measures an
 
 ---
 
+## v1.6.1 — 2026-05-06
+
+### Added
+
+- **Run attribution** — every new run records `triggered_by: {name, email, oid}` in its result JSON, sourced from the authenticated user via `get_current_user`. Legacy runs without this field display "—" gracefully.
+- **`frontend/src/components/RunHistory.jsx`** — "By" column showing who triggered each run.
+- **`frontend/src/tabs/Insights.jsx`** — Run header now shows "Triggered by [name] · [date]" beneath the Insights heading.
+
+### Changed
+
+- **`backend/controllers/run_controller.py`** — `POST /runs` now requires authentication (`get_current_user` dependency). Passes `triggered_by` to the orchestrator. Log event includes `user_email`.
+- **`backend/agents/orchestrator.py`** — `run_analysis()` accepts optional `triggered_by` dict and includes it in both complete and aborted payloads.
+- **`backend/services/run_service.py`** — `list_runs()` now includes `triggered_by` in each summary row.
+
+---
+
 ## v1.6.0 — 2026-05-05
 
 ### Added
