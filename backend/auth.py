@@ -19,14 +19,16 @@ import base64
 import hashlib
 import json
 import os
-import warnings
 from dataclasses import dataclass, asdict
 
-from fastapi import Depends, HTTPException, Request
+from fastapi import HTTPException, Request
 
 from core.logging import get_logger
 
 logger = get_logger(__name__)
+
+# Warn once at startup if running in dev-fallback mode, not on every request
+_dev_warning_emitted = False
 
 # Claim type URIs used by Azure AD / Entra ID
 _CLAIM_ALIASES = {
@@ -72,9 +74,9 @@ def _extract_claim(claims: list[dict], aliases: list[str]) -> str:
 
 
 def _decode_principal(header: str) -> CurrentUser:
-    # Base64url padding is stripped by Azure — add it back before decoding
+    # Azure uses base64url encoding (- and _ instead of + and /) with padding stripped
     padded = header + "=" * (-len(header) % 4)
-    payload = json.loads(base64.b64decode(padded))
+    payload = json.loads(base64.urlsafe_b64decode(padded))
     claims = payload.get("claims", [])
 
     name  = _extract_claim(claims, _CLAIM_ALIASES["name"])
@@ -105,6 +107,8 @@ def _parse_dev_user(dev: str) -> CurrentUser:
 
 
 def get_current_user(request: Request) -> CurrentUser:
+    global _dev_warning_emitted
+
     header = request.headers.get("X-MS-CLIENT-PRINCIPAL")
     if header:
         try:
@@ -114,10 +118,12 @@ def get_current_user(request: Request) -> CurrentUser:
 
     dev = os.getenv("DEV_USER")
     if dev:
-        logger.warning(
-            "Using DEV_USER fallback — Easy Auth not active",
-            extra={"context": {"dev_user": dev}},
-        )
+        if not _dev_warning_emitted:
+            logger.warning(
+                "Using DEV_USER fallback — Easy Auth not active",
+                extra={"context": {"dev_user": dev}},
+            )
+            _dev_warning_emitted = True
         return _parse_dev_user(dev)
 
     raise HTTPException(status_code=401, detail="Not authenticated")

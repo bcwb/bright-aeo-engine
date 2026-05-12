@@ -36,7 +36,7 @@ export default function App() {
   const [selectedRunId, setSelectedRunId] = useState(null)
   const [currentUser, setCurrentUser]     = useState(null)
 
-  useEffect(() => { getMe().then(setCurrentUser) }, [])
+  useEffect(() => { getMe().then(setCurrentUser).catch(() => {}) }, [])
 
   function handleRunComplete(runId) {
     setSelectedRunId(runId)
