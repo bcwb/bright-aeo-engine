@@ -129,4 +129,19 @@ Then open **http://localhost:5173** in your browser.
 
 ---
 
+## Claude Code / AI development
+
+This project uses [Claude Code](https://claude.ai/code) with [gstack](https://github.com/garrytan/gstack) skills. `install.sh` installs gstack automatically if `git` and `bun` are present.
+
+To install manually:
+
+```bash
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+cd ~/.claude/skills/gstack && ./setup
+```
+
+Available skills: `/browse`, `/review`, `/ship`, `/qa`, `/investigate`, `/design-html`, `/retro`, and [more](https://github.com/garrytan/gstack). See `CLAUDE.md` for project-specific working instructions.
+
+---
+
 *© 2026 Bright. All Rights Reserved. — Simply Brilliant Software*

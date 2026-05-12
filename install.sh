@@ -86,6 +86,21 @@ else
   success ".env already exists"
 fi
 
+# ── gstack (Claude Code skills) ──────────────────────────────────────────────
+
+info ""
+info "Setting up gstack Claude Code skills..."
+
+if [ -d "$HOME/.claude/skills/gstack" ]; then
+  success "gstack already installed at ~/.claude/skills/gstack"
+elif command -v git &>/dev/null && command -v bun &>/dev/null; then
+  git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git "$HOME/.claude/skills/gstack" \
+    && cd "$HOME/.claude/skills/gstack" && ./setup && cd - > /dev/null
+  success "gstack installed"
+else
+  warn "gstack skipped — requires git and bun. Install bun (https://bun.sh) then run: git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup"
+fi
+
 # ── Done ─────────────────────────────────────────────────────────────────────
 
 echo ""
